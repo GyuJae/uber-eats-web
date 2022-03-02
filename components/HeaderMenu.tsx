@@ -20,8 +20,11 @@ const HeaderMenu = () => {
       <div className="border-b-[1px] border-gray-400 px-4">
         <div className="flex flex-col justify-center py-5">
           <span className="text-lg">{data?.whoAmI.email}</span>
-          <span className="font-semibold text-sm cursor-pointer hover:underline text-green-700">
-            view detail
+          <span
+            onClick={() => router.push("/auth/edit-profile")}
+            className="font-semibold text-sm cursor-pointer hover:underline text-green-700"
+          >
+            Edit Profile
           </span>
         </div>
         <div className="space-y-5">

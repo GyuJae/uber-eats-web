@@ -8,12 +8,7 @@ import {
   createAccount,
   createAccountVariables,
 } from "../../libs/server/mutations/__generated__/createAccount";
-
-enum Role {
-  Client = "Client",
-  Delivery = "Delivery",
-  Owner = "Owner",
-}
+import { Role } from "../../__generated__/globalTypes";
 
 interface ICreateAccount {
   email: string;
