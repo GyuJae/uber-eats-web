@@ -36,6 +36,7 @@ const Login: NextPage = () => {
           localStorage.setItem(LOCALSTORAGE_TOKEN, token);
           authTokenVar(token);
           isLoggedInVar(true);
+          router.replace("/");
         } else if (!ok && error) {
           setError("stateError", {
             message: error,
@@ -55,7 +56,7 @@ const Login: NextPage = () => {
     });
   };
   return (
-    <Layout title="Login" isAuth>
+    <Layout title="Login" isAuthPage>
       <div className="flex justify-center items-center py-20">
         <div className="w-96 space-y-2">
           <h3 className="text-2xl">이메일과 비밀번호가 어떻게 되시나요?</h3>

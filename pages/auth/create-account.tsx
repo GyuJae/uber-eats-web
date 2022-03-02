@@ -57,7 +57,7 @@ const CreateAccount: NextPage = () => {
   };
 
   return (
-    <Layout title="Create Account" isAuth>
+    <Layout title="Create Account" isAuthPage>
       <div className="flex justify-center items-center py-20">
         <div className="w-96 space-y-2">
           <h3 className="text-2xl mb-2">

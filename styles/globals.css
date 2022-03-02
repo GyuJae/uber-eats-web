@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes initModal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+
+.modalInit {
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+  animation-name: initModal;
+}
+
+@keyframes sliding {
+  from {
+    transform: translateX(-300px);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+
+.menuInit {
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+  animation-name: sliding;
+}
