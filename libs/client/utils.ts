@@ -2,7 +2,7 @@ export const classToString = (...classList: string[]) => classList.join(" ");
 
 interface IFileToUrl {
   fileId: string;
-  variant: "product";
+  variant: "public";
 }
 
 export const fileToUrl = ({ fileId, variant }: IFileToUrl): string =>
