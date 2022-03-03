@@ -2,7 +2,10 @@ import { useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import ErrorSpan from "../../components/ErrorSpan";
+import Input from "../../components/Input";
 import Layout from "../../components/Layout";
+import SubmitButton from "../../components/SubmitButton";
 import { useMe } from "../../libs/client/hooks/useMe";
 import { EDIT_PROFILE_MUTATION } from "../../libs/server/mutations/edit-profile.gql";
 import {
@@ -15,15 +18,29 @@ import { Role } from "../../__generated__/globalTypes";
 interface IEditProfile {
   email?: string;
   password?: string;
-  role: Role;
+  role?: Role;
+  stateError?: string;
 }
 
 const EditProfile: NextPage = () => {
   const { data } = useMe();
-  const { register, handleSubmit, setValue } = useForm<IEditProfile>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<IEditProfile>();
   const [mutate, { loading }] = useMutation<editProfile, editProfileVariables>(
     EDIT_PROFILE_MUTATION,
     {
+      onCompleted: (data) => {
+        if (!data.editProfile.ok && data.editProfile.error) {
+          setError("stateError", {
+            message: data.editProfile.error,
+          });
+        }
+      },
       refetchQueries: [WHOAMI_QUERY, "whoAmI"],
     }
   );
@@ -65,23 +82,20 @@ const EditProfile: NextPage = () => {
               <option value="Owner">Owner</option>
             </select>
           </div>
-          <input
+          <Input
             type="email"
-            className="bg-gray-200 w-full p-2 py-3 focus:outline-[0.5px] focus:bg-gray-100"
             placeholder="이메일을 입력하세요"
-            autoComplete="off"
-            {...register("email")}
+            register={register("email")}
           />
-          <input
+          <Input
             type="password"
-            className="bg-gray-200 w-full p-2 py-3 focus:outline-[0.5px] focus:bg-gray-100"
             placeholder="비밀번호를 입력하세요"
-            autoComplete="off"
-            {...register("password")}
+            register={register("password")}
           />
-          <button className="bg-black w-full text-white text-base py-2 rounded-sm inline-block">
-            {loading ? "loading..." : "변경하기"}
-          </button>
+          <SubmitButton loading={loading} payload="변경하기" />
+          {errors.stateError && errors.stateError.message && (
+            <ErrorSpan message={errors.stateError.message} />
+          )}
         </form>
       </div>
     </Layout>

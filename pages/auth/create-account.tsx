@@ -2,7 +2,10 @@ import { useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
+import ErrorSpan from "../../components/ErrorSpan";
+import Input from "../../components/Input";
 import Layout from "../../components/Layout";
+import SubmitButton from "../../components/SubmitButton";
 import { CREATE_ACCOUNT_MUTATION } from "../../libs/server/mutations/create-account.gql";
 import {
   createAccount,
@@ -73,28 +76,20 @@ const CreateAccount: NextPage = () => {
                 <option value="Owner">Owner</option>
               </select>
             </div>
-            <input
+            <Input
               type="email"
-              className="bg-gray-200 w-full p-2 py-3 focus:outline-[0.5px] focus:bg-gray-100"
               placeholder="이메일을 입력하세요"
-              autoComplete="off"
-              {...register("email", { required: true })}
+              register={register("email", { required: true })}
             />
-            <input
+            <Input
               type="password"
-              className="bg-gray-200 w-full p-2 py-3 focus:outline-[0.5px] focus:bg-gray-100"
               placeholder="비밀번호를 입력하세요"
-              autoComplete="off"
-              {...register("password", { required: true })}
+              register={register("password", { required: true })}
             />
+            <SubmitButton loading={loading} payload="회원가입" />
 
-            <button className="bg-black w-full text-white text-base py-2 rounded-sm inline-block">
-              {loading ? "loading..." : "회원가입"}
-            </button>
-            {errors.stateError && (
-              <div className="flex flex-col justify-center items-center py-1 text-red-500 font-semibold">
-                {errors.stateError && <span>{errors.stateError.message}</span>}
-              </div>
+            {errors.stateError && errors.stateError.message && (
+              <ErrorSpan message={errors.stateError.message} />
             )}
           </form>
           <div className="flex text-sm justify-center items-center py-5">

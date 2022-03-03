@@ -5,8 +5,13 @@ import {
   LOCALSTORAGE_TOKEN,
 } from "../libs/client/apollo";
 import { useMe } from "../libs/client/hooks/useMe";
+import { Role } from "../__generated__/globalTypes";
 
-const HeaderMenu = () => {
+interface IHeaderMenu {
+  menuAnimation: "menuInit" | "menuClose";
+}
+
+const HeaderMenu: React.FC<IHeaderMenu> = ({ menuAnimation }) => {
   const { data } = useMe();
   const router = useRouter();
   const logout = () => {
@@ -16,7 +21,9 @@ const HeaderMenu = () => {
     router.reload();
   };
   return (
-    <div className="z-10 absolute overflow-y-auto bg-white w-[300px] h-screen menuInit ">
+    <div
+      className={`z-10 absolute overflow-y-auto bg-white w-[300px] h-screen ${menuAnimation}`}
+    >
       <div className="border-b-[1px] border-gray-400 px-4">
         <div className="flex flex-col justify-center py-5">
           <span className="text-lg">{data?.whoAmI.email}</span>
@@ -72,6 +79,16 @@ const HeaderMenu = () => {
           </span>
         </div>
       </div>
+      {data?.whoAmI.role === Role.Owner && (
+        <div className="px-4 py-6">
+          <span
+            className="font-semibold text-sm cursor-pointer"
+            onClick={() => router.push("/owner/create-restaurant")}
+          >
+            Add your restaurant
+          </span>
+        </div>
+      )}
     </div>
   );
 };

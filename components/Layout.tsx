@@ -7,6 +7,7 @@ import { isLoggedInVar } from "../libs/client/apollo";
 import { useMe } from "../libs/client/hooks/useMe";
 import { classToString } from "../libs/client/utils";
 import HeaderMenu from "./HeaderMenu";
+import OrdersBasket from "./OrdersBasket";
 
 interface ILayout {
   children: React.ReactNode;
@@ -14,12 +15,23 @@ interface ILayout {
   isAuthPage?: boolean;
 }
 
+interface IStateOpenMenu {
+  isOpen: boolean;
+  modalAnimation: "modalInit" | "modalClose";
+  menuAnimation: "menuInit" | "menuClose";
+}
+
 const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
   const router = useRouter();
 
   const { data } = useMe();
 
-  const [isOpenMenu, setOpenMenu] = useState<boolean>(false);
+  const [isOpenMenu, setOpenMenu] = useState<IStateOpenMenu>({
+    isOpen: false,
+    modalAnimation: "modalInit",
+    menuAnimation: "menuInit",
+  });
+  const [isOrdersBasket, setOrdersBasket] = useState<boolean>(false);
 
   return (
     <div className="relative">
@@ -27,13 +39,19 @@ const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
         <title>{title} | Uber Eats</title>
       </Head>
 
-      {isOpenMenu && <HeaderMenu />}
-      {isOpenMenu && (
+      {isOpenMenu.isOpen && (
+        <HeaderMenu menuAnimation={isOpenMenu.menuAnimation} />
+      )}
+      {isOpenMenu.isOpen && (
         <div
           onClick={() => {
-            setOpenMenu(false);
+            setOpenMenu({
+              isOpen: false,
+              modalAnimation: "modalClose",
+              menuAnimation: "menuClose",
+            });
           }}
-          className="absolute w-screen h-screen bg-black opacity-60 modalInit"
+          className={`absolute w-screen h-screen bg-black opacity-60 ${isOpenMenu.modalAnimation}`}
         />
       )}
 
@@ -51,7 +69,13 @@ const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              onClick={() => setOpenMenu(true)}
+              onClick={() => {
+                setOpenMenu({
+                  isOpen: true,
+                  modalAnimation: "modalInit",
+                  menuAnimation: "menuInit",
+                });
+              }}
             >
               <path
                 strokeLinecap="round"
@@ -82,8 +106,11 @@ const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
           </svg>
         </div>
         {!isAuthPage && (
-          <div className="flex items-center space-x-4">
-            <div className="flex space-x-2 font-medium text-sm cursor-pointer px-3 py-2 rounded-3xl bg-black text-white hover:bg-gray-700">
+          <div className="flex items-center space-x-4 relative">
+            <div
+              onClick={() => setOrdersBasket(true)}
+              className="flex space-x-2 font-medium text-sm cursor-pointer px-3 py-2 rounded-3xl bg-black text-white hover:bg-gray-700"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -96,6 +123,9 @@ const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
                 Cart <span>&#183; 0</span>
               </div>
             </div>
+            {isOrdersBasket && (
+              <OrdersBasket setOrdersBasket={setOrdersBasket} />
+            )}
             {isLoggedInVar() && data?.whoAmI ? null : (
               <div
                 onClick={() => router.push("/auth/login")}
