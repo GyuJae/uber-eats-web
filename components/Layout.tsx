@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React, { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { isLoggedInVar } from "../libs/client/apollo";
 import { useMe } from "../libs/client/hooks/useMe";
 import { classToString } from "../libs/client/utils";
@@ -21,10 +22,20 @@ interface IStateOpenMenu {
   menuAnimation: "menuInit" | "menuClose";
 }
 
+interface ISearch {
+  keyword: string;
+}
+
 const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
   const router = useRouter();
 
   const { data } = useMe();
+
+  const { register, handleSubmit } = useForm<ISearch>();
+
+  const onSubmit: SubmitHandler<ISearch> = ({ keyword }) => {
+    router.push(`/restaurants/search?keyword=${keyword}`);
+  };
 
   const [isOpenMenu, setOpenMenu] = useState<IStateOpenMenu>({
     isOpen: false,
@@ -51,7 +62,7 @@ const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
               menuAnimation: "menuClose",
             });
           }}
-          className={`absolute w-screen h-screen bg-black opacity-60 ${isOpenMenu.modalAnimation}`}
+          className={`absolute w-screen h-screen z-30 bg-black opacity-60 ${isOpenMenu.modalAnimation}`}
         />
       )}
 
@@ -105,6 +116,31 @@ const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
             </g>
           </svg>
         </div>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="relative hidden xl:block"
+        >
+          <input
+            placeholder="Food, gorceries, drinks, etc"
+            className="bg-gray-200 w-[660px] py-2 px-10 rounded-3xl focus:outline-none"
+            autoComplete="off"
+            {...register("keyword")}
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4 absolute top-3 left-3"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </form>
         {!isAuthPage && (
           <div className="flex items-center space-x-4 relative">
             <div

@@ -4,7 +4,7 @@ interface IOrdersBaseket {
 
 const OrdersBasket: React.FC<IOrdersBaseket> = ({ setOrdersBasket }) => {
   return (
-    <div className="absolute top-14 right-0 w-96 min-h-[280px] bg-white shadow-md overflow-y-auto">
+    <div className="absolute top-14 right-0 w-96 min-h-[280px] bg-white shadow-md overflow-y-auto z-20">
       <svg
         width="36px"
         height="36px"

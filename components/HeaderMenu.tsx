@@ -22,7 +22,7 @@ const HeaderMenu: React.FC<IHeaderMenu> = ({ menuAnimation }) => {
   };
   return (
     <div
-      className={`z-10 absolute overflow-y-auto bg-white w-[300px] h-screen ${menuAnimation}`}
+      className={`z-50 absolute overflow-y-auto bg-white w-[300px] h-screen ${menuAnimation}`}
     >
       <div className="border-b-[1px] border-gray-400 px-4">
         <div className="flex flex-col justify-center py-5">

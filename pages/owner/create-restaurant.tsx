@@ -15,6 +15,7 @@ import {
   createRestaurant,
   createRestaurantVariables,
 } from "../../libs/server/mutations/__generated__/createRestaurant";
+import { ALL_RESTAURANT_QUERY } from "../../libs/server/queries/allRestaurants.gql";
 
 interface ICreateRestaurant {
   name: string;
@@ -77,6 +78,7 @@ const CreateRestaurant: NextPage = () => {
           coverImg: id,
         },
       },
+      refetchQueries: [ALL_RESTAURANT_QUERY, "allRestaurant"],
     });
   };
 

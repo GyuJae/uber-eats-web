@@ -44,6 +44,11 @@ export interface LoginInput {
   password: string;
 }
 
+export interface SearchRestaurantsInput {
+  page?: number | null;
+  keyword: string;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================
