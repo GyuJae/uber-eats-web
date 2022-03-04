@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { fileToUrl } from "../libs/client/utils";
 import { allRestaurant_allRestaurant_result } from "../libs/server/queries/__generated__/allRestaurant";
-import Food from "../svgs/Food";
+import Food from "../svgs/Food.svg";
 
 interface IMainRestaurants {
   data?: allRestaurant_allRestaurant_result[] | null;

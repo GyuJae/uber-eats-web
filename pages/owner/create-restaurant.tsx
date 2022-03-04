@@ -27,7 +27,6 @@ interface ICreateRestaurant {
 
 const CreateRestaurant: NextPage = () => {
   const router = useRouter();
-  const [previewCover, setPreviweCover] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -51,6 +50,7 @@ const CreateRestaurant: NextPage = () => {
     },
   });
 
+  const [previewCover, setPreviweCover] = useState<string | null>(null);
   const coverImgWatch = watch("coverImg");
   const [coverObject, setCoverObject] = useState<boolean>(true);
 
@@ -85,7 +85,7 @@ const CreateRestaurant: NextPage = () => {
   return (
     <Layout title="Create Restaurant" isAuthPage>
       <div className="flex pt-20 pb-80 justify-center items-center bg-black h-full space-x-6">
-        <div className="text-white w-[450px] space-y-12">
+        <div className="text-white w-[450px] space-y-12 hidden md:block">
           <div className="text-5xl">수많은 고객에게 더 가까이 다가가세요</div>
           <div>
             {" "}
@@ -99,6 +99,32 @@ const CreateRestaurant: NextPage = () => {
           className="w-[560px] px-10 py-12 bg-white space-y-2"
         >
           <div className="text-2xl py-4">시작하기</div>
+          {previewCover ? (
+            <div
+              className="relative pb-80 bg-black"
+              onClick={() => setCoverObject((prev) => !prev)}
+            >
+              <Image
+                src={previewCover}
+                className={classToString(
+                  "w-full text-gray-600 h-46 ",
+                  coverObject ? "object-cover" : "object-scale-down"
+                )}
+                layout="fill"
+                alt="preview photo"
+              />
+            </div>
+          ) : (
+            <div className="my-2 ">
+              <label
+                htmlFor="coverImg"
+                className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-emerald-600 bg-emerald-200 cursor-pointer last:mr-0 mr-1"
+              >
+                {" "}
+                Cover Image
+              </label>
+            </div>
+          )}
           <Input
             type="text"
             placeholder="매장 이름"
@@ -115,32 +141,7 @@ const CreateRestaurant: NextPage = () => {
             placeholder="매장 카테고리"
             register={register("categoryName")}
           />
-          {previewCover ? (
-            <div
-              className="relative pb-80 bg-black"
-              onClick={() => setCoverObject((prev) => !prev)}
-            >
-              <Image
-                src={previewCover}
-                className={classToString(
-                  "w-full text-gray-600 h-46 rounded-md",
-                  coverObject ? "object-cover" : "object-scale-down"
-                )}
-                layout="fill"
-                alt="preview photo"
-              />
-            </div>
-          ) : (
-            <div className=" py-2 my-2">
-              <label
-                htmlFor="coverImg"
-                className="cursor-pointer border-2 p-2 mt-2 rounded-md font-semibold"
-              >
-                {" "}
-                Cover Image
-              </label>
-            </div>
-          )}
+
           <input
             id="coverImg"
             type="file"

@@ -1,3 +1,5 @@
+import LoadingBtn from "./LoadingBtn";
+
 interface ISubmitButton {
   loading: boolean;
   payload: string;
@@ -5,9 +7,15 @@ interface ISubmitButton {
 
 const SubmitButton: React.FC<ISubmitButton> = ({ loading, payload }) => {
   return (
-    <button className="bg-black w-full text-white text-base py-2 rounded-sm inline-block">
-      {loading ? "loading..." : payload}
-    </button>
+    <>
+      {loading ? (
+        <LoadingBtn />
+      ) : (
+        <button className="bg-black hover:brightness-90 w-full text-white text-base py-2 rounded-sm inline-block">
+          {payload}
+        </button>
+      )}
+    </>
   );
 };
 

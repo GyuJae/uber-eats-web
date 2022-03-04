@@ -116,31 +116,33 @@ const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
             </g>
           </svg>
         </div>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="relative hidden xl:block"
-        >
-          <input
-            placeholder="Food, gorceries, drinks, etc"
-            className="bg-gray-200 w-[660px] py-2 px-10 rounded-3xl focus:outline-none"
-            autoComplete="off"
-            {...register("keyword")}
-          />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 absolute top-3 left-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
+        {!isAuthPage && (
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="relative hidden xl:block"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            <input
+              placeholder="Food, gorceries, drinks, etc"
+              className="bg-gray-200 w-[660px] py-2 px-10 rounded-3xl focus:outline-none"
+              autoComplete="off"
+              {...register("keyword")}
             />
-          </svg>
-        </form>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 absolute top-3 left-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </form>
+        )}
         {!isAuthPage && (
           <div className="flex items-center space-x-4 relative">
             <div
