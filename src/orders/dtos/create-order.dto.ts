@@ -1,13 +1,14 @@
-import { Field, InputType, Int, ObjectType, PickType } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { CoreOutput } from 'src/common/dtos/core-output.dto';
-import { SelectOptionChoicesEntity } from '../entities/order.entity';
 
 @InputType()
-class SelectOptionChoicesInput extends PickType(
-  SelectOptionChoicesEntity,
-  ['optionId', 'choiceId'],
-  InputType,
-) {}
+export class IOptionAndChoice {
+  @Field(() => Int)
+  optionId: number;
+
+  @Field(() => Int)
+  choiceId: number;
+}
 
 @InputType()
 export class CreateOrderInput {
@@ -17,8 +18,8 @@ export class CreateOrderInput {
   @Field(() => Int)
   dishId: number;
 
-  @Field(() => [SelectOptionChoicesInput])
-  optionsSelects: SelectOptionChoicesInput[];
+  @Field(() => [IOptionAndChoice])
+  optionAndChoice: IOptionAndChoice[];
 }
 
 @ObjectType()

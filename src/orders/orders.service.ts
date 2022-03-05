@@ -24,7 +24,7 @@ export class OrdersService {
   ) {}
 
   async createOrder(
-    { optionsSelects, restaurantId, dishId }: CreateOrderInput,
+    { optionAndChoice, restaurantId, dishId }: CreateOrderInput,
     client: UserEntity,
   ): Promise<CreateOrderOutput> {
     try {
@@ -32,13 +32,8 @@ export class OrdersService {
         where: {
           id: restaurantId,
         },
-        include: {
-          dishes: {
-            include: {
-              options: true,
-              orderItems: true,
-            },
-          },
+        select: {
+          id: true,
         },
       });
       if (!restaurant) {
@@ -61,40 +56,35 @@ export class OrdersService {
           error: 'This dish Id does not exist.',
         };
       }
-
-      for (const option of optionsSelects) {
-        const dishOption = await this.prismaService.dishOption.findUnique({
-          where: {
-            id: option.optionId,
-          },
-          select: {
-            id: true,
-            dishId: true,
-          },
-        });
-        if (!dishOption && dishOption.dishId !== dish.id) {
+      const counter = {};
+      for (const { optionId, choiceId } of optionAndChoice) {
+        if (counter.hasOwnProperty(optionId)) {
           return {
             ok: false,
-            error: 'This dish option id does not exist',
+            error: 'option Id no duplicate.',
           };
+        } else {
+          counter[optionId] = 1;
         }
-        const dishOptionChoice =
-          await this.prismaService.dishOptionChoice.findFirst({
+        counter[optionId] = 1;
+        const optionChoice =
+          await this.prismaService.dishOptionChoice.findUnique({
             where: {
-              id: option.choiceId,
-              dishOptionId: dishOption.id,
-            },
-            select: {
-              id: true,
+              id_dishOptionId: {
+                id: choiceId,
+                dishOptionId: optionId,
+              },
             },
           });
-        if (!dishOptionChoice) {
+
+        if (!optionChoice) {
           return {
             ok: false,
-            error: 'This dish option choice id does not exist.',
+            error: 'This option choice id does not exist.',
           };
         }
       }
+
       const order = await this.prismaService.order.create({
         data: {
           clientId: client.id,
@@ -104,23 +94,22 @@ export class OrdersService {
           id: true,
         },
       });
-      const optionsSelectsClean = optionsSelects.map((option) => ({
-        dishId_optionId_choiceId_orderId: {
-          dishId: dish.id,
-          optionId: option.optionId,
-          choiceId: option.choiceId,
-          orderId: order.id,
-        },
-      }));
       await this.prismaService.orderItem.create({
         data: {
           orderId: order.id,
           dishId: dish.id,
           selectOptionChoices: {
-            connect: optionsSelectsClean,
+            createMany: {
+              data: optionAndChoice.map(({ optionId, choiceId }) => ({
+                optionId,
+                choiceId,
+                dishId: dish.id,
+              })),
+            },
           },
         },
       });
+
       const resultOrder = await this.prismaService.order.findUnique({
         where: {
           id: order.id,

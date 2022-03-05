@@ -68,6 +68,8 @@ model Dish {
   restaurant          Restaurant            @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   restaurantId        Int
 
+
+  @@unique([id, restaurantId])
 }
 
 model DishOption {
@@ -79,6 +81,8 @@ model DishOption {
   selectOptionChoices SelectOptionChoices[]
   dish                Dish                  @relation(fields: [dishId], references: [id], onDelete: Cascade)
   dishId              Int
+
+  @@unique([id, dishId])
 }
 
 model DishOptionChoice {
@@ -90,6 +94,8 @@ model DishOptionChoice {
   selectOptionChoices SelectOptionChoices[]
   name                String
   extra               Int?
+
+  @@unique([id, dishOptionId])
 }
 
 model Order {
