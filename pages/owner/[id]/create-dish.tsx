@@ -86,8 +86,10 @@ const CreateDish: NextPage = () => {
       (key) => options[key] === undefined && delete options[key]
     );
     const optionsContent = optionNums.map((theId) => ({
-      name: options[`${theId}-option-name`],
-      extra: options[`${theId}-option-extra`],
+      content: {
+        name: options[`${theId}-option-name`],
+        extra: options[`${theId}-option-extra`],
+      },
     }));
 
     mutate({
@@ -98,6 +100,7 @@ const CreateDish: NextPage = () => {
           description,
           price,
           restaurantId: +(restaurantId as string),
+          options: optionsContent,
         },
       },
     });
@@ -105,7 +108,7 @@ const CreateDish: NextPage = () => {
 
   return (
     <Layout isAuthPage title="Create Dish">
-      <div className="w-full h-full bg-black flex justify-center items-center pt-10 pb-80 space-x-6">
+      <div className="w-full h-full bg-black flex justify-center items-center pt-10 pb-40 space-x-6">
         <div className="text-white w-[450px] space-y-12 hidden md:block">
           <div className="text-5xl">수많은 고객에게 더 가까이 다가가세요</div>
           <div>
@@ -149,26 +152,26 @@ const CreateDish: NextPage = () => {
           <Input
             type="text"
             placeholder="메뉴 이름"
-            register={register("name")}
+            register={register("name", { required: true })}
           />
           <Input
             type="number"
             placeholder="메뉴 가격"
-            register={register("price")}
+            register={register("price", { required: true })}
           />
 
           <input
             id="photo"
             type="file"
             placeholder="photo file"
-            {...register("photo")}
+            {...register("photo", { required: true })}
             className="hidden"
             accept="images"
           />
           <textarea
             className="w-full bg-gray-200 p-2 py-3 focus:outline-[0.5px] focus:bg-gray-100"
             placeholder="메뉴 설명"
-            {...register("description")}
+            {...register("description", { required: true })}
           />
           <span
             onClick={onAddOptionClick}
