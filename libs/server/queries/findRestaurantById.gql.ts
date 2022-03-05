@@ -12,6 +12,23 @@ export const FIND_RESTAURANT_BY_ID_QUERY = gql`
         address
         coverImg
         ownerId
+        dishes {
+          id
+          name
+          price
+          photo
+          description
+          options {
+            id
+            name
+            extra
+            choices {
+              id
+              name
+              extra
+            }
+          }
+        }
       }
     }
   }

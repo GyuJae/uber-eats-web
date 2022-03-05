@@ -11,6 +11,7 @@ import { Role } from "./../../../../__generated__/globalTypes";
 
 export interface whoAmI_whoAmI {
   __typename: "UserEntity";
+  id: number;
   email: string;
   role: Role;
 }

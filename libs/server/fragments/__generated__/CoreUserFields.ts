@@ -11,6 +11,7 @@ import { Role } from "./../../../../__generated__/globalTypes";
 
 export interface CoreUserFields {
   __typename: "UserEntity";
+  id: number;
   email: string;
   role: Role;
 }

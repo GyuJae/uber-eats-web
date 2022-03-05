@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useMe } from "../libs/client/hooks/useMe";
 import { fileToUrl } from "../libs/client/utils";
 import { allRestaurant_allRestaurant_result } from "../libs/server/queries/__generated__/allRestaurant";
 import Food from "../svgs/Food.svg";
@@ -10,7 +11,7 @@ interface IMainRestaurants {
 
 const MainRestaurants: React.FC<IMainRestaurants> = ({ data }) => {
   const router = useRouter();
-
+  const { data: user } = useMe();
   return (
     <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 gap-y-6">
       {data && data.length !== 0 ? (
@@ -18,7 +19,13 @@ const MainRestaurants: React.FC<IMainRestaurants> = ({ data }) => {
           <div
             key={restaurant.id}
             className="space-y-2 cursor-pointer "
-            onClick={() => router.push(`/restaurants/${restaurant.id}`)}
+            onClick={() =>
+              router.push(
+                `/${user?.whoAmI.role.toLowerCase()}/restaurants/${
+                  restaurant.id
+                }`
+              )
+            }
           >
             <div className="relative w-full h-64 md:h-60 lg:h-56 xl:h-52">
               <Image

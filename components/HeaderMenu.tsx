@@ -71,12 +71,14 @@ const HeaderMenu: React.FC<IHeaderMenu> = ({ menuAnimation }) => {
           </div>
         </div>
         <div className="py-6">
-          <span
-            onClick={logout}
-            className="font-medium text-gray-500 cursor-pointer"
-          >
-            Sign out
-          </span>
+          {isLoggedInVar() && (
+            <span
+              onClick={logout}
+              className="font-medium text-gray-500 cursor-pointer"
+            >
+              Sign out
+            </span>
+          )}
         </div>
       </div>
       {data?.whoAmI.role === Role.Owner && (

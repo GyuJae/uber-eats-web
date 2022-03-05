@@ -9,14 +9,40 @@ import { FindRestaurantByIdInput } from "./../../../../__generated__/globalTypes
 // GraphQL query operation: findRestaurantById
 // ====================================================
 
+export interface findRestaurantById_findRestaurantById_restaurant_dishes_options_choices {
+  __typename: "DishOptionChoiceEntity";
+  id: number;
+  name: string;
+  extra: number;
+}
+
+export interface findRestaurantById_findRestaurantById_restaurant_dishes_options {
+  __typename: "DishOptionWithChoice";
+  id: number;
+  name: string;
+  extra: number;
+  choices: findRestaurantById_findRestaurantById_restaurant_dishes_options_choices[] | null;
+}
+
+export interface findRestaurantById_findRestaurantById_restaurant_dishes {
+  __typename: "DishWithOption";
+  id: number;
+  name: string;
+  price: number;
+  photo: string;
+  description: string;
+  options: findRestaurantById_findRestaurantById_restaurant_dishes_options[] | null;
+}
+
 export interface findRestaurantById_findRestaurantById_restaurant {
-  __typename: "RestaurantEntity";
+  __typename: "RestaurantWithDishes";
   id: number;
   createdAt: any;
   name: string;
   address: string;
   coverImg: string;
   ownerId: number;
+  dishes: findRestaurantById_findRestaurantById_restaurant_dishes[] | null;
 }
 
 export interface findRestaurantById_findRestaurantById {
