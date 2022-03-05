@@ -13,14 +13,13 @@ export interface findRestaurantById_findRestaurantById_restaurant_dishes_options
   __typename: "DishOptionChoiceEntity";
   id: number;
   name: string;
-  extra: number;
+  extra: number | null;
 }
 
 export interface findRestaurantById_findRestaurantById_restaurant_dishes_options {
   __typename: "DishOptionWithChoice";
   id: number;
   name: string;
-  extra: number;
   choices: findRestaurantById_findRestaurantById_restaurant_dishes_options_choices[] | null;
 }
 

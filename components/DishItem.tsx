@@ -1,19 +1,40 @@
-import Image from "next/image";
+import { useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { fileToUrl } from "../libs/client/utils";
+import { CREATE_ORDER_MUTATION } from "../libs/server/mutations/create-order.gql";
+import {
+  createOrder,
+  createOrderVariables,
+} from "../libs/server/mutations/__generated__/createOrder";
 import { findRestaurantById_findRestaurantById_restaurant_dishes } from "../libs/server/queries/__generated__/findRestaurantById";
+import ErrorSpan from "./ErrorSpan";
 
 interface IDishItem {
   dish: findRestaurantById_findRestaurantById_restaurant_dishes;
 }
 
 const DishItem: React.FC<IDishItem> = ({ dish }) => {
+  const router = useRouter();
+  const {
+    query: { id },
+  } = router;
   const [dishModal, setDishModal] = useState<boolean>(false);
-
   const [orderCount, setOrderCount] = useState<number>(0);
-
+  const [optionError, setOptionError] = useState<string | null>(null);
   const { register, getValues } = useForm();
+  const [mutate, { loading }] = useMutation<createOrder, createOrderVariables>(
+    CREATE_ORDER_MUTATION,
+    {
+      onCompleted: ({ createOrder: { ok, error } }) => {
+        if (ok) {
+          setDishModal(false);
+        } else if (!ok && error) {
+          setOptionError(error);
+        }
+      },
+    }
+  );
 
   const onlyOneCheck = (target: EventTarget & HTMLInputElement) => {
     if (target.checked) {
@@ -30,7 +51,32 @@ const DishItem: React.FC<IDishItem> = ({ dish }) => {
 
   const onBasketClick = () => {
     const options = getValues();
-    console.log(options);
+    const objValues = Object.values(options).filter(
+      (item) => item.length !== 0
+    );
+    const noCheck = Object.values(options).filter((item) => item);
+    if (
+      Object.values(options).length !== objValues.length ||
+      Object.values(options).length !== noCheck.length
+    ) {
+      setOptionError("Please check option.");
+      return;
+    } else {
+      setOptionError(null);
+    }
+    const optionAndChoice: { optionId: number; choiceId: number }[] = [];
+    for (const [key, value] of Object.entries(options)) {
+      optionAndChoice.push({ optionId: +key, choiceId: +value[0] });
+    }
+    mutate({
+      variables: {
+        input: {
+          restaurantId: +(id as string),
+          dishId: dish.id,
+          optionAndChoice,
+        },
+      },
+    });
   };
 
   return (
@@ -43,7 +89,7 @@ const DishItem: React.FC<IDishItem> = ({ dish }) => {
             }}
             className="absolute bg-black opacity-75 w-full h-full top-0 left-0 z-10 "
           ></div>
-          <div className="w-[500px] h-[600px] overflow-y-auto opacity-100 shadow-lg rounded-md bg-white z-20">
+          <div className="fixed w-[500px] h-[600px] overflow-y-auto opacity-100 shadow-lg rounded-md bg-white z-20">
             <div className="p-2 border-b-[1.5px] flex items-center space-x-2">
               <svg
                 width="36px"
@@ -83,7 +129,7 @@ const DishItem: React.FC<IDishItem> = ({ dish }) => {
                           type="checkbox"
                           onClick={(event) => onlyOneCheck(event.currentTarget)}
                           value={choice.id}
-                          {...register(option.name)}
+                          {...register(option.id + "")}
                         />
                         <span className="text-sm">
                           {choice.name} +{choice.extra}원
@@ -129,8 +175,13 @@ const DishItem: React.FC<IDishItem> = ({ dish }) => {
               onClick={onBasketClick}
               className="w-[200px] hover:bg-green-700 cursor-pointer mx-auto flex justify-center items-center py-2 rounded-md text-white font-semibold bg-green-600"
             >
-              {orderCount}개 담기
+              {loading ? "loading..." : `${orderCount}개 담기`}
             </div>
+            {optionError && (
+              <div className="py-4">
+                <ErrorSpan message={optionError} />
+              </div>
+            )}
           </div>
         </div>
       )}

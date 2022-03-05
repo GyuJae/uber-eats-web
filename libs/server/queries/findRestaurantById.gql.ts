@@ -21,7 +21,6 @@ export const FIND_RESTAURANT_BY_ID_QUERY = gql`
           options {
             id
             name
-            extra
             choices {
               id
               name

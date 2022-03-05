@@ -35,6 +35,12 @@ export interface CreateDishInput {
   options?: DishOptionAndChoice[] | null;
 }
 
+export interface CreateOrderInput {
+  restaurantId: number;
+  dishId: number;
+  optionAndChoice: IOptionAndChoice[];
+}
+
 export interface CreateRestaurantInput {
   name: string;
   address: string;
@@ -49,12 +55,11 @@ export interface DishOptionAndChoice {
 
 export interface DishOptionChoiceInput {
   name: string;
-  extra: number;
+  extra?: number | null;
 }
 
 export interface DishOptionInput {
   name: string;
-  extra: number;
 }
 
 export interface EditProfileInput {
@@ -65,6 +70,11 @@ export interface EditProfileInput {
 
 export interface FindRestaurantByIdInput {
   restaurantId: number;
+}
+
+export interface IOptionAndChoice {
+  optionId: number;
+  choiceId: number;
 }
 
 export interface LoginInput {
