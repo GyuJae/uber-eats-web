@@ -35,7 +35,10 @@ const HeaderMenu: React.FC<IHeaderMenu> = ({ menuAnimation }) => {
           </span>
         </div>
         <div className="space-y-5">
-          <div className="flex items-center space-x-4">
+          <div
+            className="flex items-center space-x-4 cursor-pointer"
+            onClick={() => router.push("/client/orders")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"

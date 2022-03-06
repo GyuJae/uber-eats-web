@@ -14,6 +14,14 @@ export const GET_ORDERS_QUERY = gql`
         restaurantId
         total
         status
+        restaurant {
+          id
+          name
+          ownerId
+          address
+          coverImg
+          categoryId
+        }
       }
     }
   }

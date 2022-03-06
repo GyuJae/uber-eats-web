@@ -10,6 +10,17 @@
 /**
  * The supported user role.
  */
+export enum OrderStatus {
+  Cooked = "Cooked",
+  Cooking = "Cooking",
+  Delivered = "Delivered",
+  Pending = "Pending",
+  PickedUp = "PickedUp",
+}
+
+/**
+ * The supported user role.
+ */
 export enum Role {
   Client = "Client",
   Delivery = "Delivery",
@@ -74,6 +85,10 @@ export interface EditProfileInput {
 
 export interface FindRestaurantByIdInput {
   restaurantId: number;
+}
+
+export interface GetOrdersInput {
+  status?: OrderStatus | null;
 }
 
 export interface IOptionAndChoice {
