@@ -1,13 +1,8 @@
-import { useMutation } from "@apollo/client";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { CREATE_ORDER_MUTATION } from "../libs/server/mutations/create-order.gql";
-import {
-  createOrder,
-  createOrderVariables,
-} from "../libs/server/mutations/__generated__/createOrder";
+import { useRecoilState } from "recoil";
 import { findRestaurantById_findRestaurantById_restaurant_dishes } from "../libs/server/queries/__generated__/findRestaurantById";
+import { basketState } from "../providers/basket.state";
 import ErrorSpan from "./ErrorSpan";
 
 interface IDishItem {
@@ -15,26 +10,11 @@ interface IDishItem {
 }
 
 const DishItem: React.FC<IDishItem> = ({ dish }) => {
-  const router = useRouter();
-  const {
-    query: { id },
-  } = router;
   const [dishModal, setDishModal] = useState<boolean>(false);
-  const [orderCount, setOrderCount] = useState<number>(0);
+  const [orderCount, setOrderCount] = useState<number>(1);
   const [optionError, setOptionError] = useState<string | null>(null);
   const { register, getValues } = useForm();
-  const [mutate, { loading }] = useMutation<createOrder, createOrderVariables>(
-    CREATE_ORDER_MUTATION,
-    {
-      onCompleted: ({ createOrder: { ok, error } }) => {
-        if (ok) {
-          setDishModal(false);
-        } else if (!ok && error) {
-          setOptionError(error);
-        }
-      },
-    }
-  );
+  const [_state, setBasketState] = useRecoilState(basketState);
 
   const onlyOneCheck = (target: EventTarget & HTMLInputElement) => {
     if (target.checked) {
@@ -68,15 +48,32 @@ const DishItem: React.FC<IDishItem> = ({ dish }) => {
     for (const [key, value] of Object.entries(options)) {
       optionAndChoice.push({ optionId: +key, choiceId: +value[0] });
     }
-    mutate({
-      variables: {
-        input: {
-          restaurantId: +(id as string),
-          dishId: dish.id,
-          optionAndChoice,
-        },
-      },
+    const optionAndChoice_name: { optionName: string; choiceName: string }[] =
+      [];
+    optionAndChoice.forEach(({ optionId, choiceId }) => {
+      const tarketOption = dish.options?.find((item) => item.id === optionId);
+      const tarketChoice = tarketOption?.choices?.find(
+        (item) => item.id === choiceId
+      );
+      if (tarketOption && tarketChoice) {
+        optionAndChoice_name.push({
+          optionName: tarketOption.name,
+          choiceName: tarketChoice.name,
+        });
+      }
     });
+    setBasketState((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        dishId: dish.id,
+        optionAndChoice,
+        count: orderCount,
+        dishName: dish.name,
+        optionAndChoice_name,
+      },
+    ]);
+    setDishModal(false);
   };
 
   return (
@@ -145,7 +142,7 @@ const DishItem: React.FC<IDishItem> = ({ dish }) => {
                   <div className="flex flex-row h-10 w-full rounded-lg relative bg-transparent">
                     <button
                       onClick={() => {
-                        if (orderCount > 0) {
+                        if (orderCount > 1) {
                           setOrderCount((prev) => prev - 1);
                         }
                       }}
@@ -175,7 +172,7 @@ const DishItem: React.FC<IDishItem> = ({ dish }) => {
               onClick={onBasketClick}
               className="w-[200px] hover:bg-green-700 cursor-pointer mx-auto flex justify-center items-center py-2 rounded-md text-white font-semibold bg-green-600"
             >
-              {loading ? "loading..." : `${orderCount}개 담기`}
+              {`${orderCount}개 담기`}
             </div>
             {optionError && (
               <div className="py-4">

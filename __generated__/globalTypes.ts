@@ -37,6 +37,10 @@ export interface CreateDishInput {
 
 export interface CreateOrderInput {
   restaurantId: number;
+  createOrderInputList: CreateOrderInputList[];
+}
+
+export interface CreateOrderInputList {
   dishId: number;
   optionAndChoice: IOptionAndChoice[];
 }
