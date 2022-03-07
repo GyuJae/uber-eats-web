@@ -36,7 +36,7 @@ const Orders: NextPage = () => {
           {data?.getOrders.orders?.map((order) => (
             <div
               key={order.id}
-              className="py-2  border-[1px] rounded-md shadow-sm hover:shadow-2xl cursor-pointer"
+              className="py-2  border-[1px] rounded-md shadow-sm hover:shadow-md cursor-pointer"
               onClick={() => router.push(`/client/orders/${order.id}`)}
             >
               <div className="relative h-48">

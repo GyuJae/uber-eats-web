@@ -13,6 +13,7 @@ export interface createDish_createDish {
   __typename: "CreateDishOutput";
   ok: boolean;
   error: string | null;
+  dishId: number | null;
 }
 
 export interface createDish {

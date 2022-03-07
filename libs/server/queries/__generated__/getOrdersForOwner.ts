@@ -6,20 +6,16 @@
 import { GetOrdersInput, OrderStatus } from "./../../../../__generated__/globalTypes";
 
 // ====================================================
-// GraphQL query operation: getOrders
+// GraphQL query operation: getOrdersForOwner
 // ====================================================
 
-export interface getOrders_getOrders_orders_restaurant {
-  __typename: "RestaurantEntity";
+export interface getOrdersForOwner_getOrders_orders_client {
+  __typename: "UserEntity";
   id: number;
-  name: string;
-  ownerId: number;
-  address: string;
-  coverImg: string;
-  categoryId: number;
+  email: string;
 }
 
-export interface getOrders_getOrders_orders {
+export interface getOrdersForOwner_getOrders_orders {
   __typename: "OrdersWithRestaurantAndClient";
   id: number;
   createdAt: any;
@@ -29,20 +25,20 @@ export interface getOrders_getOrders_orders {
   restaurantId: number;
   total: number | null;
   status: OrderStatus;
-  restaurant: getOrders_getOrders_orders_restaurant;
+  client: getOrdersForOwner_getOrders_orders_client;
 }
 
-export interface getOrders_getOrders {
+export interface getOrdersForOwner_getOrders {
   __typename: "GetOrdersOutput";
   ok: boolean;
   error: string | null;
-  orders: getOrders_getOrders_orders[] | null;
+  orders: getOrdersForOwner_getOrders_orders[] | null;
 }
 
-export interface getOrders {
-  getOrders: getOrders_getOrders;
+export interface getOrdersForOwner {
+  getOrders: getOrdersForOwner_getOrders;
 }
 
-export interface getOrdersVariables {
+export interface getOrdersForOwnerVariables {
   input: GetOrdersInput;
 }

@@ -6,8 +6,8 @@ import {
   split,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { WebSocketLink } from "@apollo/client/link/ws";
-import { getMainDefinition } from "@apollo/client/utilities";
+import { WebSocketLink } from "apollo-link-ws";
+import { getMainDefinition } from "apollo-utilities";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql",
@@ -29,27 +29,31 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/graphql`,
-  options: {
-    reconnect: true,
-    connectionParams: {
-      "x-jwt": authTokenVar() || "",
-    },
-  },
-});
+const wsLink = process.browser
+  ? new WebSocketLink({
+      uri: `ws://localhost:4000/graphql`,
+      options: {
+        reconnect: true,
+        connectionParams: {
+          "x-jwt": authTokenVar() || "",
+        },
+      },
+    })
+  : null;
 
-const splitlink = split(
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
-    );
-  },
-  wsLink,
-  authLink.concat(httpLink)
-);
+const splitlink = process.browser
+  ? split(
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === "OperationDefinition" &&
+          definition.operation === "subscription"
+        );
+      },
+      wsLink,
+      authLink.concat(httpLink)
+    )
+  : httpLink;
 
 export const client = new ApolloClient({
   link: splitlink,

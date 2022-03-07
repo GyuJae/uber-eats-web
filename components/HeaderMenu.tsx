@@ -37,7 +37,12 @@ const HeaderMenu: React.FC<IHeaderMenu> = ({ menuAnimation }) => {
         <div className="space-y-5">
           <div
             className="flex items-center space-x-4 cursor-pointer"
-            onClick={() => router.push("/client/orders")}
+            onClick={() => {
+              if (data?.whoAmI.role === Role.Owner) {
+                return null;
+              }
+              router.push(`/${data?.whoAmI.role.toLowerCase()}/orders`);
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

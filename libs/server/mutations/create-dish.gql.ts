@@ -5,6 +5,7 @@ export const CREATE_DISH_MUTATION = gql`
     createDish(input: $input) {
       ok
       error
+      dishId
     }
   }
 `;

@@ -3,7 +3,8 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, useFieldArray } from "react-hook-form";
+import ErrorSpan from "../../../components/ErrorSpan";
 import Input from "../../../components/Input";
 import Layout from "../../../components/Layout";
 import SubmitButton from "../../../components/SubmitButton";
@@ -19,28 +20,38 @@ interface ICreateDish {
   price: number;
   photo: FileList;
   description: string;
-  [key: string]: any;
-}
-
-interface IOptionObj {
-  name: string;
-  extra: number;
+  formErrors?: string;
 }
 
 const CreateDish: NextPage = () => {
-  const { register, handleSubmit, watch, setValue } = useForm<ICreateDish>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setError,
+    formState: { errors },
+  } = useForm<ICreateDish>();
   const router = useRouter();
   const [mutate, { loading }] = useMutation<createDish, createDishVariables>(
     CREATE_DISH_MUTATION,
     {
-      onCompleted: (data) => {
-        console.log(data);
+      onCompleted: ({ createDish: { ok, error, dishId } }) => {
+        if (ok && dishId) {
+          if (window.confirm("메뉴의 옵션을 추가 하시겠습니까?")) {
+            router.replace(`/owner/${restaurantId}/${dishId}/create-options`);
+          } else {
+          }
+        } else if (!ok && error) {
+          setError("formErrors", {
+            message: error,
+          });
+        }
       },
     }
   );
 
   const {
-    query: { id: restaurantId },
+    query: { restaurantId },
   } = router;
 
   const [previewCover, setPreviweCover] = useState<string | null>(null);
@@ -54,24 +65,11 @@ const CreateDish: NextPage = () => {
     }
   }, [photoWatch]);
 
-  const [optionNums, setOptionNums] = useState<number[]>([]);
-
-  const onAddOptionClick = () => {
-    setOptionNums((prev) => [...prev, Date.now()]);
-  };
-
-  const onDeleteOptionClick = (deleteId: number) => {
-    setOptionNums((prev) => prev.filter((item) => item !== deleteId));
-    setValue(`${deleteId}-option-name`, undefined);
-    setValue(`${deleteId}-option-extra`, undefined);
-  };
-
   const onSubmit: SubmitHandler<ICreateDish> = async ({
     name,
     price,
     photo,
     description,
-    ...options
   }) => {
     const { uploadURL } = await (
       await fetch("/api/files", { method: "POST" })
@@ -79,28 +77,16 @@ const CreateDish: NextPage = () => {
     const form = new FormData();
     form.append("file", photo[0], name);
     const {
-      result: { id },
+      result: { id: photoId },
     } = await (await fetch(uploadURL, { method: "POST", body: form })).json();
-
-    Object.keys(options).forEach(
-      (key) => options[key] === undefined && delete options[key]
-    );
-    const optionsContent = optionNums.map((theId) => ({
-      content: {
-        name: options[`${theId}-option-name`],
-        extra: options[`${theId}-option-extra`],
-      },
-    }));
-
     mutate({
       variables: {
         input: {
           name,
-          photo: id,
+          photo: photoId,
           description,
           price,
           restaurantId: +(restaurantId as string),
-          options: optionsContent,
         },
       },
     });
@@ -157,9 +143,11 @@ const CreateDish: NextPage = () => {
           <Input
             type="number"
             placeholder="메뉴 가격"
-            register={register("price", { required: true })}
+            register={register("price", {
+              required: true,
+              valueAsNumber: true,
+            })}
           />
-
           <input
             id="photo"
             type="file"
@@ -173,52 +161,10 @@ const CreateDish: NextPage = () => {
             placeholder="메뉴 설명"
             {...register("description", { required: true })}
           />
-          <span
-            onClick={onAddOptionClick}
-            className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded text-black bg-gray-200 cursor-pointer last:mr-0 mr-1"
-          >
-            Add Option
-          </span>
-          {optionNums.length > 0 && (
-            <div className="space-y-2">
-              {optionNums.map((optionId) => (
-                <div key={optionId} className="grid grid-cols-9 gap-2">
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    {...register(`${optionId}-option-name`)}
-                    className="col-span-5 bg-gray-200 w-full p-2 py-3 focus:outline-[0.5px] focus:bg-gray-100"
-                    autoComplete="off"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Extra"
-                    {...register(`${optionId}-option-extra`)}
-                    className="col-span-3 bg-gray-200 w-full p-2 py-3 focus:outline-[0.5px] focus:bg-gray-100"
-                    autoComplete="off"
-                  />
 
-                  <div
-                    onClick={() => {
-                      onDeleteOptionClick(optionId);
-                    }}
-                    className="cursor-pointer bg-red-300 hover:bg-red-400 flex justify-center items-center text-red-900 rounded-md "
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              ))}
+          {errors.formErrors && errors.formErrors.message && (
+            <div className="pb-2">
+              <ErrorSpan message={errors.formErrors.message} />
             </div>
           )}
           <SubmitButton loading={loading} payload={"메뉴 작성"} />

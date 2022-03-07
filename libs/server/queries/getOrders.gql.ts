@@ -26,3 +26,26 @@ export const GET_ORDERS_QUERY = gql`
     }
   }
 `;
+
+export const GET_ORDERS_OWNER_QUERY = gql`
+  query getOrdersForOwner($input: GetOrdersInput!) {
+    getOrders(input: $input) {
+      ok
+      error
+      orders {
+        id
+        createdAt
+        updatedAt
+        driverId
+        clientId
+        restaurantId
+        total
+        status
+        client {
+          id
+          email
+        }
+      }
+    }
+  }
+`;
