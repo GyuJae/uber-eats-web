@@ -44,7 +44,7 @@ const CreateOptions: NextPage = () => {
     {
       onCompleted: ({ editDish: { ok, error } }) => {
         if (ok) {
-          router.replace(`/client/restaurants/${restaurantId}`);
+          router.replace(`/owner/restaurants/${restaurantId}`);
         } else if (!ok && error) {
           setError("formError", {
             message: error,

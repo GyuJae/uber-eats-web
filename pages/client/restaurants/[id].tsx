@@ -49,7 +49,7 @@ const RestaurantDetail: NextPage = () => {
                 })}
                 layout="fill"
                 alt="restaurant photo"
-                className="absolute"
+                className="absolute object-cover"
               />
             ) : (
               <div className="w-full h-96 bg-gray-800" />

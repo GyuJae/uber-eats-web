@@ -11,7 +11,7 @@ interface IMainRestaurants {
 
 const MainRestaurants: React.FC<IMainRestaurants> = ({ data }) => {
   const router = useRouter();
-  const { data: user } = useMe();
+  const user = useMe();
   return (
     <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 gap-y-6">
       {data && data.length !== 0 ? (
@@ -21,7 +21,7 @@ const MainRestaurants: React.FC<IMainRestaurants> = ({ data }) => {
             className="space-y-2 cursor-pointer "
             onClick={() =>
               router.push(
-                `/${user?.whoAmI.role.toLowerCase()}/restaurants/${
+                `/${user.data?.whoAmI.role.toLowerCase()}/restaurants/${
                   restaurant.id
                 }`
               )

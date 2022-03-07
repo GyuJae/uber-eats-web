@@ -54,6 +54,7 @@ export interface CreateOrderInput {
 export interface CreateOrderInputList {
   dishId: number;
   optionAndChoice: IOptionAndChoice[];
+  count?: number | null;
 }
 
 export interface CreateRestaurantInput {

@@ -20,7 +20,7 @@ const CounterDetail: NextPage = () => {
   >(GET_DETAIL_ORDER_QUERY, {
     variables: {
       input: {
-        orderId,
+        orderId: +(orderId as string),
       },
     },
   });

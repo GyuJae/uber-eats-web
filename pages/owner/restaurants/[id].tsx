@@ -70,8 +70,11 @@ const RestaurantDetail: NextPage = () => {
                   Add Dish &rarr;
                 </div>
 
-                <div className="py-2 px-4 bg-green-600 hover:bg-green-700  rounded-sm text-white text-sm cursor-pointer">
-                  Buy Promotion &rarr;
+                <div
+                  onClick={() => router.push(`/owner/${restaurantId}/counter`)}
+                  className="py-2 px-4 bg-green-600 hover:bg-green-700  rounded-sm text-white text-sm cursor-pointer"
+                >
+                  Go Counter &rarr;
                 </div>
               </div>
             )}
@@ -83,7 +86,14 @@ const RestaurantDetail: NextPage = () => {
                   key={dish.id}
                   className="border-[1px] flex flex-col justify-center items-start py-2 rounded-sm space-y-2 cursor-pointer"
                 >
-                  <div className="w-11/12 h-36 bg-gray-400 mx-auto" />
+                  <div className="w-11/12 h-36 bg-black mx-auto cursor-pointer relative">
+                    <Image
+                      src={fileToUrl({ fileId: dish.photo, variant: "public" })}
+                      layout="fill"
+                      alt="dish photo"
+                      className="absolute"
+                    />
+                  </div>
                   <div className="px-2 space-y-1 flex flex-col">
                     <span className="font-semibold text-sm">{dish.name}</span>
                     <span className="font-semibold text-xs">\{dish.price}</span>

@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
+import { fileToUrl } from "../libs/client/utils";
 import { findRestaurantById_findRestaurantById_restaurant_dishes } from "../libs/server/queries/__generated__/findRestaurantById";
 import { basketState } from "../providers/basket.state";
 import ErrorSpan from "./ErrorSpan";
@@ -186,7 +188,14 @@ const DishItem: React.FC<IDishItem> = ({ dish }) => {
         onClick={() => setDishModal(true)}
         className="border-[1px] flex flex-col justify-center items-start py-2 rounded-sm space-y-2"
       >
-        <div className="w-11/12 h-36 bg-gray-400 mx-auto cursor-pointer" />
+        <div className="w-11/12 h-36 bg-black mx-auto cursor-pointer relative">
+          <Image
+            src={fileToUrl({ fileId: dish.photo, variant: "public" })}
+            layout="fill"
+            alt="dish photo"
+            className="absolute"
+          />
+        </div>
         <div className="px-2 space-y-1 flex flex-col cursor-pointer">
           <span className="font-semibold text-sm cursor-pointer">
             {dish.name}

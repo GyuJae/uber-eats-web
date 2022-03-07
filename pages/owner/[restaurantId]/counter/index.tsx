@@ -20,7 +20,7 @@ const Pending: NextPage = () => {
     query: { restaurantId },
   } = router;
   const [status, setStatus] = useState<OrderStatus | null>(null);
-  const { data, loading } = useSubscription<pendingOrders>(
+  const { data, loading, error } = useSubscription<pendingOrders>(
     PENDING_ORDERS_SUBSCRIPTION
   );
   const { data: ordersData, loading: ordersLoading } = useQuery<
@@ -60,7 +60,8 @@ const Pending: NextPage = () => {
           </div>
         </div>
       )}{" "}
-      New Order : {loading ? "loading" : data?.pendingOrders.client.email}
+      New Order : {loading ? "loading" : data?.pendingOrders.client.email}{" "}
+      {error && <span className="text-red-500">{error}</span>}
     </Layout>
   );
 };

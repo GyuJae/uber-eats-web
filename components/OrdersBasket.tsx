@@ -1,4 +1,5 @@
 import { useMutation } from "@apollo/client";
+import { count } from "console";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
@@ -36,7 +37,9 @@ const OrdersBasket: React.FC<IOrdersBaseket> = ({ setOrdersBasket }) => {
   const onDeleteOrderItem = (id: number) => {
     setState((prev) => prev.filter((item) => item.id !== id));
   };
+  console.log(state);
   const createOrderInputList = state.map((input) => ({
+    count: input.count,
     dishId: input.dishId,
     optionAndChoice: input.optionAndChoice,
   }));
