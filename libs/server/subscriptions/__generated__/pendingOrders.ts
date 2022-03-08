@@ -3,17 +3,9 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { OrderStatus } from "./../../../../__generated__/globalTypes";
-
 // ====================================================
 // GraphQL subscription operation: pendingOrders
 // ====================================================
-
-export interface pendingOrders_pendingOrders_restaurant {
-  __typename: "RestaurantEntity";
-  id: number;
-  name: string;
-}
 
 export interface pendingOrders_pendingOrders_client {
   __typename: "UserEntity";
@@ -21,15 +13,42 @@ export interface pendingOrders_pendingOrders_client {
   email: string;
 }
 
+export interface pendingOrders_pendingOrders_orderItems_dish {
+  __typename: "DishEntity";
+  name: string;
+}
+
+export interface pendingOrders_pendingOrders_orderItems_selectOptionChoices_option {
+  __typename: "DishOptionEntity";
+  id: number;
+  name: string;
+}
+
+export interface pendingOrders_pendingOrders_orderItems_selectOptionChoices_choice {
+  __typename: "DishOptionChoiceEntity";
+  id: number;
+  name: string;
+}
+
+export interface pendingOrders_pendingOrders_orderItems_selectOptionChoices {
+  __typename: "SelectOptionChoicesEntityWithOptionAndChoice";
+  option: pendingOrders_pendingOrders_orderItems_selectOptionChoices_option;
+  choice: pendingOrders_pendingOrders_orderItems_selectOptionChoices_choice;
+}
+
+export interface pendingOrders_pendingOrders_orderItems {
+  __typename: "OrderItemWithSelectOptionChoices";
+  id: number;
+  dish: pendingOrders_pendingOrders_orderItems_dish;
+  selectOptionChoices: pendingOrders_pendingOrders_orderItems_selectOptionChoices[];
+}
+
 export interface pendingOrders_pendingOrders {
   __typename: "PendingOrderOutput";
   id: number;
-  createdAt: any;
-  updatedAt: any;
-  status: OrderStatus;
-  total: number | null;
-  restaurant: pendingOrders_pendingOrders_restaurant;
   client: pendingOrders_pendingOrders_client;
+  total: number | null;
+  orderItems: pendingOrders_pendingOrders_orderItems[];
 }
 
 export interface pendingOrders {

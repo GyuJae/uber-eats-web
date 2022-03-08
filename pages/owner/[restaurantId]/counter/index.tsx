@@ -1,10 +1,15 @@
-import { useQuery, useSubscription } from "@apollo/client";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Layout from "../../../../components/Layout";
 import LoadingPage from "../../../../components/LoadingPage";
 import { orderStatusToKorean } from "../../../../libs/client/utils";
+import { EDIT_ORDER_MUTATION } from "../../../../libs/server/mutations/edit-order.gql";
+import {
+  editOrder,
+  editOrderVariables,
+} from "../../../../libs/server/mutations/__generated__/editOrder";
 import { GET_ORDERS_OWNER_QUERY } from "../../../../libs/server/queries/getOrders.gql";
 import {
   getOrdersForOwner,
@@ -20,7 +25,7 @@ const Pending: NextPage = () => {
     query: { restaurantId },
   } = router;
   const [status, setStatus] = useState<OrderStatus | null>(null);
-  const { data, loading, error } = useSubscription<pendingOrders>(
+  const { data, loading } = useSubscription<pendingOrders>(
     PENDING_ORDERS_SUBSCRIPTION
   );
   const { data: ordersData, loading: ordersLoading } = useQuery<
@@ -33,6 +38,22 @@ const Pending: NextPage = () => {
       },
     },
   });
+  const [editOrderMutate, { loading: editOrderLoading }] = useMutation<
+    editOrder,
+    editOrderVariables
+  >(EDIT_ORDER_MUTATION);
+
+  const onEditCookingOrder = (orderId: number) => {
+    editOrderMutate({
+      variables: {
+        input: {
+          orderId,
+          status: OrderStatus.Cooking,
+        },
+      },
+    });
+  };
+
   return (
     <Layout title="counter" isAuthPage>
       {ordersLoading ? (
@@ -60,8 +81,44 @@ const Pending: NextPage = () => {
           </div>
         </div>
       )}{" "}
-      New Order : {loading ? "loading" : data?.pendingOrders.client.email}{" "}
-      {error && <span className="text-red-500">{error}</span>}
+      <div>
+        <div className="px-4 py-2 font-semibold">New Order</div>
+        {loading ? (
+          <LoadingPage />
+        ) : (
+          data?.pendingOrders && (
+            <div className="px-20 grid grid-cols-4">
+              <div className="border-2 border-black px-2 py-4 rounded-md shadow-md">
+                <div className="border-b-2 py-2">
+                  <span className="font-semibold">From: </span>
+                  <span>{data?.pendingOrders.client.email}</span>
+                </div>
+                {data?.pendingOrders.orderItems.map((item) => (
+                  <div className="py-2" key={item.id}>
+                    <div className="font-semibold">{item.dish.name}</div>
+                    {item.selectOptionChoices.map((select) => (
+                      <div className="px-2 space-x-3" key={select.option.id}>
+                        <span>{select.option.name}</span>
+                        <span>{select.choice.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+                <div>
+                  <span className="font-semibold">Total : </span>
+                  <span>${data?.pendingOrders.total}</span>
+                </div>
+                <div
+                  onClick={() => onEditCookingOrder(data.pendingOrders.id)}
+                  className="mt-2 p-1 font-semibold text-white bg-black flex justify-center items-center cursor-pointer"
+                >
+                  {editOrderLoading ? "loading..." : "Take Order"}
+                </div>
+              </div>
+            </div>
+          )
+        )}
+      </div>
     </Layout>
   );
 };

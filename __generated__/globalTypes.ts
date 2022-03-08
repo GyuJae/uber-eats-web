@@ -83,6 +83,11 @@ export interface EditDishInput {
   dishId: number;
 }
 
+export interface EditOrderInput {
+  status?: OrderStatus | null;
+  orderId: number;
+}
+
 export interface EditProfileInput {
   email?: string | null;
   password?: string | null;

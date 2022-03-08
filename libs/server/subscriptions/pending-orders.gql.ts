@@ -4,17 +4,26 @@ export const PENDING_ORDERS_SUBSCRIPTION = gql`
   subscription pendingOrders {
     pendingOrders {
       id
-      createdAt
-      updatedAt
-      status
-      total
-      restaurant {
-        id
-        name
-      }
       client {
         id
         email
+      }
+      total
+      orderItems {
+        id
+        dish {
+          name
+        }
+        selectOptionChoices {
+          option {
+            id
+            name
+          }
+          choice {
+            id
+            name
+          }
+        }
       }
     }
   }
