@@ -19,6 +19,39 @@ export interface getOrders_getOrders_orders_restaurant {
   categoryId: number;
 }
 
+export interface getOrders_getOrders_orders_orderItems_dish {
+  __typename: "DishEntity";
+  id: number;
+  name: string;
+}
+
+export interface getOrders_getOrders_orders_orderItems_selectOptionChoices_option {
+  __typename: "DishOptionEntity";
+  id: number;
+  name: string;
+}
+
+export interface getOrders_getOrders_orders_orderItems_selectOptionChoices_choice {
+  __typename: "DishOptionChoiceEntity";
+  id: number;
+  name: string;
+}
+
+export interface getOrders_getOrders_orders_orderItems_selectOptionChoices {
+  __typename: "SelectOptionChoicesWithOptionAndChoice";
+  id: number;
+  option: getOrders_getOrders_orders_orderItems_selectOptionChoices_option;
+  choice: getOrders_getOrders_orders_orderItems_selectOptionChoices_choice;
+}
+
+export interface getOrders_getOrders_orders_orderItems {
+  __typename: "OrderItemWithSelectOptionAndChoice";
+  id: number;
+  count: number;
+  dish: getOrders_getOrders_orders_orderItems_dish;
+  selectOptionChoices: getOrders_getOrders_orders_orderItems_selectOptionChoices[];
+}
+
 export interface getOrders_getOrders_orders {
   __typename: "OrdersWithRestaurantAndClient";
   id: number;
@@ -30,6 +63,7 @@ export interface getOrders_getOrders_orders {
   total: number | null;
   status: OrderStatus;
   restaurant: getOrders_getOrders_orders_restaurant;
+  orderItems: getOrders_getOrders_orders_orderItems[];
 }
 
 export interface getOrders_getOrders {

@@ -12,7 +12,7 @@ export const fileToUrl = ({ fileId, variant }: IFileToUrl): string =>
 
 export const orderStatusToKorean = (status: OrderStatus): string => {
   if (status === OrderStatus.Pending) {
-    return "배달 접수중";
+    return "주문 접수 중";
   } else if (status === OrderStatus.Cooking) {
     return "요리 중";
   } else if (status === OrderStatus.Cooked) {
@@ -21,6 +21,8 @@ export const orderStatusToKorean = (status: OrderStatus): string => {
     return "배달 중";
   } else if (status === OrderStatus.Delivered) {
     return "배달 완료";
+  } else if (status === OrderStatus.Reject) {
+    return "주문 거절";
   }
   return "상태 파악 불가";
 };

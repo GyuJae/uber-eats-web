@@ -3,10 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import {
-  UpdateOrderInput,
-  OrderStatus,
-} from "./../../../../__generated__/globalTypes";
+import { UpdateOrderInput, OrderStatus } from "./../../../../__generated__/globalTypes";
 
 // ====================================================
 // GraphQL subscription operation: updateOrder

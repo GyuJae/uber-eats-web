@@ -9,6 +9,39 @@ import { GetOrdersInput, OrderStatus } from "./../../../../__generated__/globalT
 // GraphQL query operation: getOrdersForOwner
 // ====================================================
 
+export interface getOrdersForOwner_getOrders_orders_orderItems_dish {
+  __typename: "DishEntity";
+  id: number;
+  name: string;
+}
+
+export interface getOrdersForOwner_getOrders_orders_orderItems_selectOptionChoices_option {
+  __typename: "DishOptionEntity";
+  id: number;
+  name: string;
+}
+
+export interface getOrdersForOwner_getOrders_orders_orderItems_selectOptionChoices_choice {
+  __typename: "DishOptionChoiceEntity";
+  id: number;
+  name: string;
+}
+
+export interface getOrdersForOwner_getOrders_orders_orderItems_selectOptionChoices {
+  __typename: "SelectOptionChoicesWithOptionAndChoice";
+  id: number;
+  option: getOrdersForOwner_getOrders_orders_orderItems_selectOptionChoices_option;
+  choice: getOrdersForOwner_getOrders_orders_orderItems_selectOptionChoices_choice;
+}
+
+export interface getOrdersForOwner_getOrders_orders_orderItems {
+  __typename: "OrderItemWithSelectOptionAndChoice";
+  id: number;
+  count: number;
+  dish: getOrdersForOwner_getOrders_orders_orderItems_dish;
+  selectOptionChoices: getOrdersForOwner_getOrders_orders_orderItems_selectOptionChoices[];
+}
+
 export interface getOrdersForOwner_getOrders_orders_client {
   __typename: "UserEntity";
   id: number;
@@ -25,6 +58,7 @@ export interface getOrdersForOwner_getOrders_orders {
   restaurantId: number;
   total: number | null;
   status: OrderStatus;
+  orderItems: getOrdersForOwner_getOrders_orders_orderItems[];
   client: getOrdersForOwner_getOrders_orders_client;
 }
 

@@ -16,6 +16,7 @@ export enum OrderStatus {
   Delivered = "Delivered",
   Pending = "Pending",
   PickedUp = "PickedUp",
+  Reject = "Reject",
 }
 
 /**

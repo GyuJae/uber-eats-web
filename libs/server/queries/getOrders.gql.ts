@@ -22,6 +22,25 @@ export const GET_ORDERS_QUERY = gql`
           coverImg
           categoryId
         }
+        orderItems {
+          id
+          count
+          dish {
+            id
+            name
+          }
+          selectOptionChoices {
+            id
+            option {
+              id
+              name
+            }
+            choice {
+              id
+              name
+            }
+          }
+        }
       }
     }
   }
@@ -41,6 +60,25 @@ export const GET_ORDERS_OWNER_QUERY = gql`
         restaurantId
         total
         status
+        orderItems {
+          id
+          count
+          dish {
+            id
+            name
+          }
+          selectOptionChoices {
+            id
+            option {
+              id
+              name
+            }
+            choice {
+              id
+              name
+            }
+          }
+        }
         client {
           id
           email
