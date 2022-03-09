@@ -1,13 +1,13 @@
 import { useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import Layout from "../../components/Layout";
-import MainRestaurants from "../../components/MainRestaurants";
-import { SEARCH_RESTAURANTS_QUERY } from "../../libs/server/queries/searchRestaurants.gql";
+import Layout from "@components/Layout";
+import MainRestaurants from "@components/MainRestaurants";
+import { SEARCH_RESTAURANTS_QUERY } from "@libs/server/queries/searchRestaurants.gql";
 import {
   searchRestaurants,
   searchRestaurantsVariables,
-} from "../../libs/server/queries/__generated__/searchRestaurants";
+} from "@libs/server/queries/__generated__/searchRestaurants";
 
 const Search: NextPage = () => {
   const router = useRouter();

@@ -15,6 +15,7 @@ export interface searchRestaurants_searchRestaurants_result {
   name: string;
   coverImg: string;
   address: string;
+  ownerId: number;
 }
 
 export interface searchRestaurants_searchRestaurants {

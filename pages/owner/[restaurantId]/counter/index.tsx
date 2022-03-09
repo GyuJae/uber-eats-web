@@ -2,21 +2,21 @@ import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import Layout from "../../../../components/Layout";
-import LoadingPage from "../../../../components/LoadingPage";
-import { orderStatusToKorean } from "../../../../libs/client/utils";
-import { EDIT_ORDER_MUTATION } from "../../../../libs/server/mutations/edit-order.gql";
+import Layout from "@components/Layout";
+import LoadingPage from "@components/LoadingPage";
+import { orderStatusToKorean } from "@libs/client/utils";
+import { EDIT_ORDER_MUTATION } from "@libs/server/mutations/edit-order.gql";
 import {
   editOrder,
   editOrderVariables,
-} from "../../../../libs/server/mutations/__generated__/editOrder";
-import { GET_ORDERS_OWNER_QUERY } from "../../../../libs/server/queries/getOrders.gql";
+} from "@libs/server/mutations/__generated__/editOrder";
+import { GET_ORDERS_OWNER_QUERY } from "@libs/server/queries/getOrders.gql";
 import {
   getOrdersForOwner,
   getOrdersForOwnerVariables,
-} from "../../../../libs/server/queries/__generated__/getOrdersForOwner";
-import { PENDING_ORDERS_SUBSCRIPTION } from "../../../../libs/server/subscriptions/pending-orders.gql";
-import { pendingOrders } from "../../../../libs/server/subscriptions/__generated__/pendingOrders";
+} from "@libs/server/queries/__generated__/getOrdersForOwner";
+import { PENDING_ORDERS_SUBSCRIPTION } from "@libs/server/subscriptions/pending-orders.gql";
+import { pendingOrders } from "@libs/server/subscriptions/__generated__/pendingOrders";
 import { OrderStatus } from "../../../../__generated__/globalTypes";
 
 const Pending: NextPage = () => {

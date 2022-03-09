@@ -2,17 +2,17 @@ import { useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import ErrorSpan from "../../components/ErrorSpan";
-import Input from "../../components/Input";
-import Layout from "../../components/Layout";
-import SubmitButton from "../../components/SubmitButton";
-import { useMe } from "../../libs/client/hooks/useMe";
-import { EDIT_PROFILE_MUTATION } from "../../libs/server/mutations/edit-profile.gql";
+import ErrorSpan from "@components/ErrorSpan";
+import Input from "@components/Input";
+import Layout from "@components/Layout";
+import SubmitButton from "@components/SubmitButton";
+import { useMe } from "@libs/client/hooks/useMe";
+import { EDIT_PROFILE_MUTATION } from "@libs/server/mutations/edit-profile.gql";
 import {
   editProfile,
   editProfileVariables,
-} from "../../libs/server/mutations/__generated__/editProfile";
-import { WHOAMI_QUERY } from "../../libs/server/queries/whoAmI.gql";
+} from "@libs/server/mutations/__generated__/editProfile";
+import { WHOAMI_QUERY } from "@libs/server/queries/whoAmI.gql";
 import { Role } from "../../__generated__/globalTypes";
 
 interface IEditProfile {

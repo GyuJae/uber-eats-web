@@ -2,10 +2,10 @@ import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { fileToUrl } from "../libs/client/utils";
-import { findRestaurantById_findRestaurantById_restaurant_dishes } from "../libs/server/queries/__generated__/findRestaurantById";
-import { basketState } from "../providers/basket.state";
-import ErrorSpan from "./ErrorSpan";
+import { fileToUrl } from "@libs/client/utils";
+import { findRestaurantById_findRestaurantById_restaurant_dishes } from "@libs/server/queries/__generated__/findRestaurantById";
+import { basketState } from "@providers/basket.state";
+import ErrorSpan from "@components/ErrorSpan";
 
 interface IDishItem {
   dish: findRestaurantById_findRestaurantById_restaurant_dishes;

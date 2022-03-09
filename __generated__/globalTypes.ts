@@ -121,6 +121,10 @@ export interface SearchRestaurantsInput {
   keyword: string;
 }
 
+export interface UpdateOrderInput {
+  orderId: number;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

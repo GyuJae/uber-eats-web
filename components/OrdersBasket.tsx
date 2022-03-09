@@ -1,15 +1,15 @@
 import { useMutation } from "@apollo/client";
-import { count } from "console";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { CREATE_ORDER_MUTATION } from "../libs/server/mutations/create-order.gql";
+import { CREATE_ORDER_MUTATION } from "@libs/server/mutations/create-order.gql";
 import {
   createOrder,
   createOrderVariables,
-} from "../libs/server/mutations/__generated__/createOrder";
-import { basketState } from "../providers/basket.state";
-import ErrorSpan from "./ErrorSpan";
+} from "@libs/server/mutations/__generated__/createOrder";
+import { basketState } from "@providers/basket.state";
+import ErrorSpan from "@components/ErrorSpan";
+import { GET_ORDERS_QUERY } from "@libs/server/queries/getOrders.gql";
 
 interface IOrdersBaseket {
   setOrdersBasket: any;
@@ -32,12 +32,12 @@ const OrdersBasket: React.FC<IOrdersBaseket> = ({ setOrdersBasket }) => {
           setOrderError(error);
         }
       },
+      refetchQueries: [GET_ORDERS_QUERY, "getOrders"],
     }
   );
   const onDeleteOrderItem = (id: number) => {
     setState((prev) => prev.filter((item) => item.id !== id));
   };
-  console.log(state);
   const createOrderInputList = state.map((input) => ({
     count: input.count,
     dishId: input.dishId,

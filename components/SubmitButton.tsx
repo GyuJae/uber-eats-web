@@ -1,4 +1,4 @@
-import LoadingBtn from "./LoadingBtn";
+import LoadingBtn from "@components/LoadingBtn";
 
 interface ISubmitButton {
   loading: boolean;

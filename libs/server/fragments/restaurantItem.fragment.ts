@@ -6,5 +6,6 @@ export const RESTAURANT_ITEM_FIELDS = gql`
     name
     coverImg
     address
+    ownerId
   }
 `;

@@ -6,8 +6,9 @@ import {
   split,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
+import { WebSocketLink } from "apollo-link-ws";
+//import { WebSocketLink } from "apollo-link-ws";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql",
@@ -17,7 +18,6 @@ export const LOCALSTORAGE_TOKEN = "TOKEN";
 
 const token =
   typeof window !== "undefined" ? localStorage.getItem(LOCALSTORAGE_TOKEN) : "";
-export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar(token);
 
 const authLink = setContext((_, { headers }) => {
@@ -41,7 +41,16 @@ const wsLink = process.browser
     })
   : null;
 
-const splitlink = process.browser
+// const wsLink = new GraphQLWsLink(
+//   createClient({
+//     url: "ws://localhost:4000/graphql",
+//     connectionParams: {
+//       "x-jwt": authTokenVar() || "",
+//     },
+//   })
+// );
+
+const splitLink = process.browser
   ? split(
       ({ query }) => {
         const definition = getMainDefinition(query);
@@ -53,19 +62,14 @@ const splitlink = process.browser
       wsLink,
       authLink.concat(httpLink)
     )
-  : httpLink;
+  : authLink.concat(httpLink);
 
 export const client = new ApolloClient({
-  link: splitlink,
+  link: splitLink,
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
         fields: {
-          isLoggedIn: {
-            read() {
-              return isLoggedInVar();
-            },
-          },
           token: {
             read() {
               return authTokenVar();

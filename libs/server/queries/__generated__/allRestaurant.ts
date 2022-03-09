@@ -15,6 +15,7 @@ export interface allRestaurant_allRestaurant_result {
   name: string;
   coverImg: string;
   address: string;
+  ownerId: number;
 }
 
 export interface allRestaurant_allRestaurant {

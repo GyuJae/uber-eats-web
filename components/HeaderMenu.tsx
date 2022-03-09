@@ -1,10 +1,6 @@
 import { useRouter } from "next/router";
-import {
-  authTokenVar,
-  isLoggedInVar,
-  LOCALSTORAGE_TOKEN,
-} from "../libs/client/apollo";
-import { useMe } from "../libs/client/hooks/useMe";
+import { authTokenVar, LOCALSTORAGE_TOKEN } from "@libs/client/apollo";
+import { useMe } from "@libs/client/hooks/useMe";
 import { Role } from "../__generated__/globalTypes";
 
 interface IHeaderMenu {
@@ -16,7 +12,6 @@ const HeaderMenu: React.FC<IHeaderMenu> = ({ menuAnimation }) => {
   const router = useRouter();
   const logout = () => {
     localStorage.removeItem(LOCALSTORAGE_TOKEN);
-    isLoggedInVar(false);
     authTokenVar(null);
     router.push("/");
     router.reload();
@@ -25,7 +20,7 @@ const HeaderMenu: React.FC<IHeaderMenu> = ({ menuAnimation }) => {
     <div
       className={`z-50 absolute overflow-y-auto bg-white w-[300px] h-screen ${menuAnimation}`}
     >
-      {isLoggedInVar() ? (
+      {data?.whoAmI.id ? (
         <div>
           <div className="border-b-[1px] border-gray-400 px-4">
             <div className="flex flex-col justify-center py-5">
@@ -82,7 +77,7 @@ const HeaderMenu: React.FC<IHeaderMenu> = ({ menuAnimation }) => {
               </div>
             </div>
             <div className="py-6">
-              {isLoggedInVar() && (
+              {data.whoAmI.id && (
                 <span
                   onClick={logout}
                   className="font-medium text-gray-500 cursor-pointer"

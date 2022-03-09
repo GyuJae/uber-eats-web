@@ -1,16 +1,16 @@
 import { useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { EDIT_DISH_MUTATION } from "../../../../libs/server/mutations/edit-dish.gql";
+import { EDIT_DISH_MUTATION } from "@libs/server/mutations/edit-dish.gql";
 import {
   editDish,
   editDishVariables,
-} from "../../../../libs/server/mutations/__generated__/editDish";
+} from "@libs/server/mutations/__generated__/editDish";
 
 import { useForm, useFieldArray } from "react-hook-form";
-import Layout from "../../../../components/Layout";
+import Layout from "@components/Layout";
 import { FormEventHandler, useState } from "react";
-import ErrorSpan from "../../../../components/ErrorSpan";
+import ErrorSpan from "@components/ErrorSpan";
 
 type OptionNameValues = {
   options: {

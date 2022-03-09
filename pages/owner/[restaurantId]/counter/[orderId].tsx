@@ -1,13 +1,13 @@
 import { useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import Layout from "../../../../components/Layout";
-import LoadingPage from "../../../../components/LoadingPage";
-import { GET_DETAIL_ORDER_QUERY } from "../../../../libs/server/queries/getDetailOrder.gql";
+import Layout from "@components/Layout";
+import LoadingPage from "@components/LoadingPage";
+import { GET_DETAIL_ORDER_QUERY } from "@libs/server/queries/getDetailOrder.gql";
 import {
   getDetailOrder,
   getDetailOrderVariables,
-} from "../../../../libs/server/queries/__generated__/getDetailOrder";
+} from "@libs/server/queries/__generated__/getDetailOrder";
 
 const CounterDetail: NextPage = () => {
   const router = useRouter();

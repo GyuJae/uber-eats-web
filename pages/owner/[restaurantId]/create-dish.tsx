@@ -4,16 +4,16 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm, useFieldArray } from "react-hook-form";
-import ErrorSpan from "../../../components/ErrorSpan";
-import Input from "../../../components/Input";
-import Layout from "../../../components/Layout";
-import SubmitButton from "../../../components/SubmitButton";
-import { classToString } from "../../../libs/client/utils";
-import { CREATE_DISH_MUTATION } from "../../../libs/server/mutations/create-dish.gql";
+import ErrorSpan from "@components/ErrorSpan";
+import Input from "@components/Input";
+import Layout from "@components/Layout";
+import SubmitButton from "@components/SubmitButton";
+import { classToString } from "@libs/client/utils";
+import { CREATE_DISH_MUTATION } from "@libs/server/mutations/create-dish.gql";
 import {
   createDish,
   createDishVariables,
-} from "../../../libs/server/mutations/__generated__/createDish";
+} from "@libs/server/mutations/__generated__/createDish";
 
 interface ICreateDish {
   name: string;

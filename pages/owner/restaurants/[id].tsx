@@ -2,15 +2,15 @@ import { useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import Layout from "../../../components/Layout";
-import LoadingPage from "../../../components/LoadingPage";
-import { useMe } from "../../../libs/client/hooks/useMe";
-import { fileToUrl } from "../../../libs/client/utils";
-import { FIND_RESTAURANT_BY_ID_QUERY } from "../../../libs/server/queries/findRestaurantById.gql";
+import Layout from "@components/Layout";
+import LoadingPage from "@components/LoadingPage";
+import { useMe } from "@libs/client/hooks/useMe";
+import { fileToUrl } from "@libs/client/utils";
+import { FIND_RESTAURANT_BY_ID_QUERY } from "@libs/server/queries/findRestaurantById.gql";
 import {
   findRestaurantById,
   findRestaurantByIdVariables,
-} from "../../../libs/server/queries/__generated__/findRestaurantById";
+} from "@libs/server/queries/__generated__/findRestaurantById";
 
 const RestaurantDetail: NextPage = () => {
   const router = useRouter();

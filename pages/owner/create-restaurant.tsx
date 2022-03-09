@@ -5,17 +5,17 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import ErrorSpan from "../../components/ErrorSpan";
-import Input from "../../components/Input";
-import Layout from "../../components/Layout";
-import SubmitButton from "../../components/SubmitButton";
-import { classToString } from "../../libs/client/utils";
-import { CREATE_RESTAURANT_MUTATION } from "../../libs/server/mutations/create-restaurant.gql";
+import ErrorSpan from "@components/ErrorSpan";
+import Input from "@components/Input";
+import Layout from "@components/Layout";
+import SubmitButton from "@components/SubmitButton";
+import { classToString } from "@libs/client/utils";
+import { CREATE_RESTAURANT_MUTATION } from "@libs/server/mutations/create-restaurant.gql";
 import {
   createRestaurant,
   createRestaurantVariables,
-} from "../../libs/server/mutations/__generated__/createRestaurant";
-import { ALL_RESTAURANT_QUERY } from "../../libs/server/queries/allRestaurants.gql";
+} from "@libs/server/mutations/__generated__/createRestaurant";
+import { ALL_RESTAURANT_QUERY } from "@libs/server/queries/allRestaurants.gql";
 
 interface ICreateRestaurant {
   name: string;

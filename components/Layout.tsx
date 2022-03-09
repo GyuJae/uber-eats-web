@@ -4,7 +4,6 @@ import React, { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { isLoggedInVar } from "../libs/client/apollo";
 import { useMe } from "../libs/client/hooks/useMe";
 import { classToString } from "../libs/client/utils";
 import HeaderMenu from "./HeaderMenu";
@@ -144,7 +143,7 @@ const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
         )}
         {!isAuthPage && (
           <div className="flex items-center space-x-4 relative">
-            {isLoggedInVar() && data?.whoAmI ? null : (
+            {data?.whoAmI.id ? null : (
               <div
                 onClick={() => router.push("/auth/login")}
                 className="font-medium text-sm cursor-pointer px-2 py-2 rounded-3xl bg-gray-100 hover:bg-gray-200"

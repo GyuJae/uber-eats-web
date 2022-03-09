@@ -2,20 +2,16 @@ import { useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
-import ErrorSpan from "../../components/ErrorSpan";
-import Input from "../../components/Input";
-import Layout from "../../components/Layout";
-import SubmitButton from "../../components/SubmitButton";
-import {
-  authTokenVar,
-  isLoggedInVar,
-  LOCALSTORAGE_TOKEN,
-} from "../../libs/client/apollo";
-import { LOGIN_MUTATION } from "../../libs/server/mutations/login.gql";
+import ErrorSpan from "@components/ErrorSpan";
+import Input from "@components/Input";
+import Layout from "@components/Layout";
+import SubmitButton from "@components/SubmitButton";
+import { authTokenVar, LOCALSTORAGE_TOKEN } from "@libs/client/apollo";
+import { LOGIN_MUTATION } from "@libs/server/mutations/login.gql";
 import {
   login,
   loginVariables,
-} from "../../libs/server/mutations/__generated__/login";
+} from "@libs/server/mutations/__generated__/login";
 
 interface ILogin {
   email: string;
@@ -38,7 +34,6 @@ const Login: NextPage = () => {
         if (ok && token) {
           localStorage.setItem(LOCALSTORAGE_TOKEN, token);
           authTokenVar(token);
-          isLoggedInVar(true);
           router.replace("/");
         } else if (!ok && error) {
           setError("stateError", {

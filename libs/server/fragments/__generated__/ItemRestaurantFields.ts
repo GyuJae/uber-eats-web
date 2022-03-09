@@ -13,4 +13,5 @@ export interface ItemRestaurantFields {
   name: string;
   coverImg: string;
   address: string;
+  ownerId: number;
 }

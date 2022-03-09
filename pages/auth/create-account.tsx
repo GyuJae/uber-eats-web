@@ -2,15 +2,15 @@ import { useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
-import ErrorSpan from "../../components/ErrorSpan";
-import Input from "../../components/Input";
-import Layout from "../../components/Layout";
-import SubmitButton from "../../components/SubmitButton";
-import { CREATE_ACCOUNT_MUTATION } from "../../libs/server/mutations/create-account.gql";
+import ErrorSpan from "@components/ErrorSpan";
+import Input from "@components/Input";
+import Layout from "@components/Layout";
+import SubmitButton from "@components/SubmitButton";
+import { CREATE_ACCOUNT_MUTATION } from "@libs/server/mutations/create-account.gql";
 import {
   createAccount,
   createAccountVariables,
-} from "../../libs/server/mutations/__generated__/createAccount";
+} from "@libs/server/mutations/__generated__/createAccount";
 import { Role } from "../../__generated__/globalTypes";
 
 interface ICreateAccount {
