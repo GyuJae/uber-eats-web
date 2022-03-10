@@ -1,4 +1,4 @@
-import { useSubscription } from "@apollo/client";
+import { useMutation, useSubscription } from "@apollo/client";
 import Layout from "@components/Layout";
 import useCoords from "@libs/client/hooks/useCoords";
 import { COOKED_ORDERS_SUBSCRIPTION } from "@libs/server/subscriptions/cooked-orders.gql";
@@ -9,6 +9,12 @@ import {
 import type { NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import GoogleMapReact from "google-map-react";
+import { TAKE_ORDER_MUTATION } from "@libs/server/mutations/take-order.gql";
+import {
+  takeOrder,
+  takeOrderVariables,
+} from "@libs/server/mutations/__generated__/takeOrder";
+import { OrderStatus } from "__generated__/globalTypes";
 
 interface IDriverProps {
   lat: number;
@@ -26,6 +32,10 @@ const Orders: NextPage = () => {
     COOKED_ORDERS_SUBSCRIPTION
   );
   const [orders, setOrders] = useState<cookedOrders_cookedOrders[]>([]);
+  const [mutate, { loading: takeOrderLoading }] = useMutation<
+    takeOrder,
+    takeOrderVariables
+  >(TAKE_ORDER_MUTATION);
 
   useEffect(() => {
     if (data?.cookedOrders) {
@@ -42,6 +52,45 @@ const Orders: NextPage = () => {
       map.panTo(new maps.LatLng(latitude, longitude));
     }
   }, [latitude, longitude, map, maps]);
+
+  // const onGetRouteClick = () => {
+  //   if (map) {
+  //     const directionsService = new google.maps.DirectionsService();
+  //     const directionsRender = new google.maps.DirectionsRenderer({
+  //       polylineOptions: {
+  //         strokeColor: "#000",
+  //         strokeOpacity: 1,
+  //         strokeWeight: 40,
+  //       },
+  //     });
+  //     directionsRender.setMap(map);
+  //     directionsService.route(
+  //       {
+  //         origin: {
+  //           location: new google.maps.LatLng(latitude, longitude),
+  //         },
+  //         destination: {
+  //           location: new google.maps.LatLng(latitude + 0.05, longitude + 0.05),
+  //         },
+  //         travelMode: google.maps.TravelMode.DRIVING,
+  //       },
+  //       (result) => {
+  //         directionsRender.setDirections(result);
+  //       }
+  //     );
+  //   }
+  // };
+
+  const onTakeOrder = (orderId: number) => {
+    mutate({
+      variables: {
+        input: {
+          orderId,
+        },
+      },
+    });
+    setOrders((prev) => prev.filter((order) => order.id !== orderId));
+  };
 
   return (
     <Layout title="Take Orders" isAuthPage>
@@ -82,8 +131,22 @@ const Orders: NextPage = () => {
                     <Order lat={order.lat || 0} lng={order.lon || 0} />
                   </GoogleMapReact>{" "}
                   <div className="mt-2">
-                    <span className="font-semibold">Address:</span>{" "}
-                    <span>{order.address}</span>
+                    <span className="font-semibold text-sm">Address:</span>{" "}
+                    <span className="text-xs">{order.address}</span>
+                    <div
+                      onClick={() => {
+                        if (order.status === OrderStatus.Cooked) {
+                          onTakeOrder(order.id);
+                        }
+                      }}
+                      className="bg-green-600 hover:bg-green-700 mt-2 px-2 py-1 flex justify-center rounded-sm shadow-inner cursor-pointer text-white font-semibold"
+                    >
+                      {order.status === OrderStatus.Cooked
+                        ? "Take Order"
+                        : order.status === OrderStatus.PickedUp
+                        ? "Driving"
+                        : null}
+                    </div>
                   </div>
                 </div>
               ))}

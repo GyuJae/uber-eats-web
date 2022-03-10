@@ -75,7 +75,7 @@ const Counter: NextPage = () => {
   return (
     <Layout title="counter" isAuthPage>
       {ordersLoading ? (
-        <LoadingPage />
+        <div className="py-10 flex justify-center items-center">loading...</div>
       ) : (
         <div>
           <div className="flex space-x-2 pt-6 pb-3 px-4">

@@ -125,6 +125,10 @@ export interface SearchRestaurantsInput {
   keyword: string;
 }
 
+export interface TakeOrderInput {
+  orderId: number;
+}
+
 export interface UpdateOrderInput {
   orderId: number;
 }
