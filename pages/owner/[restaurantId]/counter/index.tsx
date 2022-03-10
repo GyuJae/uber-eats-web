@@ -23,11 +23,7 @@ import {
 import { OrderStatus } from "../../../../__generated__/globalTypes";
 import CounterOrderItem from "@components/CounterOrderItem";
 
-const Pending: NextPage = () => {
-  const router = useRouter();
-  const {
-    query: { restaurantId },
-  } = router;
+const Counter: NextPage = () => {
   const [status, setStatus] = useState<OrderStatus>(OrderStatus.Pending);
   const [takeOrders, setTakeOrders] = useState<pendingOrders_pendingOrders[]>(
     []
@@ -164,4 +160,4 @@ const Pending: NextPage = () => {
   );
 };
 
-export default Pending;
+export default Counter;

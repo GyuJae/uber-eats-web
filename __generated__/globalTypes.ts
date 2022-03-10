@@ -49,6 +49,9 @@ export interface CreateDishInput {
 
 export interface CreateOrderInput {
   restaurantId: number;
+  address: string;
+  lat: number;
+  lon: number;
   createOrderInputList: CreateOrderInputList[];
 }
 

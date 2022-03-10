@@ -10,6 +10,7 @@ import {
 import { basketState } from "@providers/basket.state";
 import ErrorSpan from "@components/ErrorSpan";
 import { GET_ORDERS_QUERY } from "@libs/server/queries/getOrders.gql";
+import useCoords from "@libs/client/hooks/useCoords";
 
 interface IOrdersBaseket {
   setOrdersBasket: any;
@@ -17,6 +18,7 @@ interface IOrdersBaseket {
 
 const OrdersBasket: React.FC<IOrdersBaseket> = ({ setOrdersBasket }) => {
   const router = useRouter();
+  const { latitude, longitude } = useCoords();
   const {
     query: { id },
   } = router;
@@ -51,6 +53,9 @@ const OrdersBasket: React.FC<IOrdersBaseket> = ({ setOrdersBasket }) => {
         input: {
           restaurantId: +(id as string),
           createOrderInputList,
+          address: "",
+          lat: latitude || -1,
+          lon: longitude || -1,
         },
       },
     });
