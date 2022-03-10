@@ -53,9 +53,7 @@ const Counter: NextPage = () => {
   const [editOrderMutate, { loading: editOrderLoading }] = useMutation<
     editOrder,
     editOrderVariables
-  >(EDIT_ORDER_MUTATION, {
-    refetchQueries: [GET_ORDERS_OWNER_QUERY, "getOrders"],
-  });
+  >(EDIT_ORDER_MUTATION);
 
   const onEditCookingOrder = (
     orderId: number,
@@ -69,6 +67,7 @@ const Counter: NextPage = () => {
           status,
         },
       },
+      refetchQueries: [GET_ORDERS_OWNER_QUERY, "getOrders"],
     });
     setTakeOrders((prev) => prev.filter((order) => order.id !== orderId));
   };
