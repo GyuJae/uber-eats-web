@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { Role } from "__generated__/globalTypes";
 import { useMe } from "../libs/client/hooks/useMe";
 import { classToString } from "../libs/client/utils";
 import HeaderMenu from "./HeaderMenu";
@@ -13,6 +14,8 @@ interface ILayout {
   children: React.ReactNode;
   title: string;
   isAuthPage?: boolean;
+  isEditPage?: boolean;
+  isRole?: Role | "Any";
 }
 
 interface IStateOpenMenu {
@@ -25,10 +28,34 @@ interface ISearch {
   keyword: string;
 }
 
-const Layout: React.FC<ILayout> = ({ children, title, isAuthPage = false }) => {
+const Layout: React.FC<ILayout> = ({
+  children,
+  title,
+  isAuthPage = false,
+  isRole = "Any",
+  isEditPage = false,
+}) => {
   const router = useRouter();
 
   const { data } = useMe();
+  useEffect(() => {
+    if (isRole !== "Any" && data?.whoAmI.role && isRole !== data?.whoAmI.role) {
+      router.replace("/");
+    }
+    if (isAuthPage && data?.whoAmI.id && !isEditPage) {
+      router.replace("/");
+    }
+    if (data?.whoAmI.role === Role.Delivery) {
+      router.replace("/delivery/orders");
+    }
+  }, [
+    data?.whoAmI.id,
+    data?.whoAmI.role,
+    isAuthPage,
+    isEditPage,
+    isRole,
+    router,
+  ]);
 
   const { register, handleSubmit } = useForm<ISearch>();
 

@@ -14,6 +14,7 @@ import {
   createDish,
   createDishVariables,
 } from "@libs/server/mutations/__generated__/createDish";
+import { Role } from "__generated__/globalTypes";
 
 interface ICreateDish {
   name: string;
@@ -93,7 +94,7 @@ const CreateDish: NextPage = () => {
   };
 
   return (
-    <Layout isAuthPage title="Create Dish">
+    <Layout title="Create Dish" isRole={Role.Owner}>
       <div className="w-full h-full bg-black flex justify-center items-center pt-10 pb-40 space-x-6">
         <div className="text-white w-[450px] space-y-12 hidden md:block">
           <div className="text-5xl">수많은 고객에게 더 가까이 다가가세요</div>

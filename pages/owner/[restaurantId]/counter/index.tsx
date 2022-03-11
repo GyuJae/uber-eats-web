@@ -20,7 +20,7 @@ import {
   pendingOrders,
   pendingOrders_pendingOrders,
 } from "@libs/server/subscriptions/__generated__/pendingOrders";
-import { OrderStatus } from "../../../../__generated__/globalTypes";
+import { OrderStatus, Role } from "../../../../__generated__/globalTypes";
 import CounterOrderItem from "@components/CounterOrderItem";
 
 const Counter: NextPage = () => {
@@ -73,7 +73,7 @@ const Counter: NextPage = () => {
   };
 
   return (
-    <Layout title="counter" isAuthPage>
+    <Layout title="counter" isRole={Role.Owner}>
       {ordersLoading ? (
         <div className="py-10 flex justify-center items-center">loading...</div>
       ) : (

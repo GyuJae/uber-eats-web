@@ -1,5 +1,24 @@
 import { gql } from "@apollo/client";
 
+export const GET_ORDERS_DRIVER = gql`
+  query getOrdersForDriver($input: GetOrdersInput!) {
+    getOrders(input: $input) {
+      ok
+      error
+      orders {
+        id
+        address
+        lat
+        lon
+        total
+        client {
+          email
+        }
+      }
+    }
+  }
+`;
+
 export const GET_ORDERS_QUERY = gql`
   query getOrders($input: GetOrdersInput!) {
     getOrders(input: $input) {

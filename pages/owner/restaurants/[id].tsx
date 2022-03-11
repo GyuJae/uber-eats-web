@@ -11,6 +11,7 @@ import {
   findRestaurantById,
   findRestaurantByIdVariables,
 } from "@libs/server/queries/__generated__/findRestaurantById";
+import { Role } from "__generated__/globalTypes";
 
 const RestaurantDetail: NextPage = () => {
   const router = useRouter();
@@ -36,6 +37,7 @@ const RestaurantDetail: NextPage = () => {
           ? "loading"
           : data?.findRestaurantById.restaurant?.name || "Restaurant"
       }
+      isRole={Role.Owner}
     >
       {loading ? (
         <LoadingPage />

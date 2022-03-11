@@ -8,6 +8,7 @@ import {
   getDetailOrder,
   getDetailOrderVariables,
 } from "@libs/server/queries/__generated__/getDetailOrder";
+import { Role } from "__generated__/globalTypes";
 
 const CounterDetail: NextPage = () => {
   const router = useRouter();
@@ -26,7 +27,7 @@ const CounterDetail: NextPage = () => {
   });
   console.log(data, loading, error);
   return (
-    <Layout title="Counter Detail">
+    <Layout title="Counter Detail" isRole={Role.Owner}>
       {loading ? (
         <LoadingPage />
       ) : (

@@ -11,6 +11,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import Layout from "@components/Layout";
 import { FormEventHandler, useState } from "react";
 import ErrorSpan from "@components/ErrorSpan";
+import { Role } from "__generated__/globalTypes";
 
 type OptionNameValues = {
   options: {
@@ -124,7 +125,7 @@ const CreateOptions: NextPage = () => {
   };
 
   return (
-    <Layout isAuthPage title="Create Options">
+    <Layout isAuthPage title="Create Options" isRole={Role.Owner}>
       <div className="px-4 py-5 max-w-xl mx-auto space-y-4">
         <div className="flex items-center space-x-3">
           <button

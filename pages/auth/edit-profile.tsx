@@ -14,6 +14,7 @@ import {
 } from "@libs/server/mutations/__generated__/editProfile";
 import { WHOAMI_QUERY } from "@libs/server/queries/whoAmI.gql";
 import { Role } from "../../__generated__/globalTypes";
+import { useRouter } from "next/router";
 
 interface IEditProfile {
   email?: string;
@@ -24,6 +25,7 @@ interface IEditProfile {
 
 const EditProfile: NextPage = () => {
   const { data } = useMe();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -40,6 +42,7 @@ const EditProfile: NextPage = () => {
             message: data.editProfile.error,
           });
         }
+        router.push("/");
       },
       refetchQueries: [WHOAMI_QUERY, "whoAmI"],
     }
@@ -62,13 +65,13 @@ const EditProfile: NextPage = () => {
   }, [data?.whoAmI.email, data?.whoAmI.role, setValue]);
 
   return (
-    <Layout title="Edit Profile" isAuthPage>
+    <Layout title="Edit Profile" isAuthPage isEditPage>
       <div className=" py-20 flex flex-col justify-center items-center space-y-3">
         <h3 className="text-2xl w-96">
-          이메일, Role 혹은 비밀번호를 변경 하시겠습니까?
+          이메일 혹은 비밀번호를 변경 하시겠습니까?
         </h3>
         <form className="w-96 space-y-2" onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex py-1 ">
+          {/* <div className="flex py-1 ">
             <label htmlFor="role" className="font-semibold mr-4">
               Role
             </label>
@@ -81,7 +84,7 @@ const EditProfile: NextPage = () => {
               <option value="Delivery">Delivery</option>
               <option value="Owner">Owner</option>
             </select>
-          </div>
+          </div> */}
           <Input
             type="email"
             placeholder="이메일을 입력하세요"

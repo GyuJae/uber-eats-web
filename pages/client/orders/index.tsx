@@ -12,7 +12,7 @@ import {
   getOrdersVariables,
 } from "@libs/server/queries/__generated__/getOrders";
 import Food from "@svgs/Food.svg";
-import { OrderStatus } from "../../../__generated__/globalTypes";
+import { OrderStatus, Role } from "../../../__generated__/globalTypes";
 
 const Orders: NextPage = () => {
   const router = useRouter();
@@ -29,7 +29,7 @@ const Orders: NextPage = () => {
   );
 
   return (
-    <Layout title="Order">
+    <Layout title="Order" isRole={Role.Client}>
       {loading ? (
         <LoadingPage />
       ) : (

@@ -1,4 +1,4 @@
-import { useMutation, useSubscription } from "@apollo/client";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import Layout from "@components/Layout";
 import useCoords from "@libs/client/hooks/useCoords";
 import { COOKED_ORDERS_SUBSCRIPTION } from "@libs/server/subscriptions/cooked-orders.gql";
@@ -14,7 +14,20 @@ import {
   takeOrder,
   takeOrderVariables,
 } from "@libs/server/mutations/__generated__/takeOrder";
-import { OrderStatus } from "__generated__/globalTypes";
+import { OrderStatus, Role } from "__generated__/globalTypes";
+import {
+  GET_ORDERS_DRIVER,
+  GET_ORDERS_QUERY,
+} from "@libs/server/queries/getOrders.gql";
+import {
+  getOrdersForDriver,
+  getOrdersForDriverVariables,
+} from "@libs/server/queries/__generated__/getOrdersForDriver";
+import { EDIT_ORDER_MUTATION } from "@libs/server/mutations/edit-order.gql";
+import {
+  editOrder,
+  editOrderVariables,
+} from "@libs/server/mutations/__generated__/editOrder";
 
 interface IDriverProps {
   lat: number;
@@ -88,12 +101,41 @@ const Orders: NextPage = () => {
           orderId,
         },
       },
+      refetchQueries: [GET_ORDERS_DRIVER, "getOrdersForDriver"],
     });
     setOrders((prev) => prev.filter((order) => order.id !== orderId));
   };
 
+  const { data: getOrdersData, loading: getOrdersLoading } = useQuery<
+    getOrdersForDriver,
+    getOrdersForDriverVariables
+  >(GET_ORDERS_DRIVER, {
+    variables: {
+      input: {
+        status: OrderStatus.PickedUp,
+      },
+    },
+  });
+
+  const [editOrderMutate, { loading: editOrderLoading }] = useMutation<
+    editOrder,
+    editOrderVariables
+  >(EDIT_ORDER_MUTATION);
+
+  const onCompletedOrder = (orderId: number) => {
+    editOrderMutate({
+      variables: {
+        input: {
+          orderId,
+          status: OrderStatus.Delivered,
+        },
+      },
+      refetchQueries: [GET_ORDERS_DRIVER, "getOrdersForDriver"],
+    });
+  };
+
   return (
-    <Layout title="Take Orders" isAuthPage>
+    <Layout title="Take Orders" isRole={Role.Delivery}>
       <div className="w-full h-[50vh]">
         <GoogleMapReact
           defaultZoom={17}
@@ -109,12 +151,51 @@ const Orders: NextPage = () => {
         </GoogleMapReact>
       </div>
       <div className="p-4">
+        <span className="font-semibold">Currenet My Dirving Orders</span>
+        {getOrdersLoading ? (
+          <div className="flex justify-center items-center">
+            <span className="font-semibold">loading...</span>
+          </div>
+        ) : !getOrdersData?.getOrders.orders ||
+          getOrdersData?.getOrders.orders.length === 0 ? (
+          <div className="flex justify-center items-center py-2">
+            <span className="">No Orders</span>
+          </div>
+        ) : (
+          <div className="p-4 pb-20 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 gap-y-6">
+            {getOrdersData.getOrders.orders.map((order) => (
+              <div
+                key={order.id}
+                className="border-[1px] shadow-sm p-2 rounded-md space-y-2"
+              >
+                <div className="text-xs flex items-center space-x-1">
+                  <span className="font-semibold">Who Ordered:</span>{" "}
+                  <span>{order.client.email}</span>
+                </div>
+                <div className="text-xs flex items-center space-x-1">
+                  <span className="font-semibold">Address:</span>{" "}
+                  <span>{order.address}</span>
+                </div>
+                <div
+                  onClick={() => onCompletedOrder(order.id)}
+                  className="text-sm bg-green-500 hover:bg-green-600 cursor-pointer py-2 flex justify-center items-center text-white font-semibold rounded-sm"
+                >
+                  Completed Delivery
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="p-4">
         <span className="font-semibold">Take Orders</span>
-        <div className="px-4 py-2">
-          {loading ? (
-            "loading..."
+        <div className="p-4 pb-20">
+          {true ? (
+            <div className="flex justify-center items-center">
+              Take Ordering Waiting...
+            </div>
           ) : (
-            <div className="p-4 pb-20 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 gap-y-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 gap-y-6">
               {orders.map((order) => (
                 <div key={order.id} className="w-full h-[300px]">
                   <GoogleMapReact
@@ -141,7 +222,9 @@ const Orders: NextPage = () => {
                       }}
                       className="bg-green-600 hover:bg-green-700 mt-2 px-2 py-1 flex justify-center rounded-sm shadow-inner cursor-pointer text-white font-semibold"
                     >
-                      {order.status === OrderStatus.Cooked
+                      {takeOrderLoading
+                        ? "loading..."
+                        : order.status === OrderStatus.Cooked
                         ? "Take Order"
                         : order.status === OrderStatus.PickedUp
                         ? "Driving"

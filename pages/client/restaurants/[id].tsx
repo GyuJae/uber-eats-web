@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
+import { Role } from "__generated__/globalTypes";
 import DishItem from "../../../components/DishItem";
 import Layout from "../../../components/Layout";
 import LoadingPage from "../../../components/LoadingPage";
@@ -35,7 +36,7 @@ const RestaurantDetail: NextPage = () => {
   });
 
   return (
-    <Layout title="Restaurant">
+    <Layout title="Restaurant" isRole={Role.Client}>
       {loading ? (
         <LoadingPage />
       ) : (

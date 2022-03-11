@@ -16,6 +16,7 @@ import {
   createRestaurantVariables,
 } from "@libs/server/mutations/__generated__/createRestaurant";
 import { ALL_RESTAURANT_QUERY } from "@libs/server/queries/allRestaurants.gql";
+import { Role } from "__generated__/globalTypes";
 
 interface ICreateRestaurant {
   name: string;
@@ -83,7 +84,7 @@ const CreateRestaurant: NextPage = () => {
   };
 
   return (
-    <Layout title="Create Restaurant" isAuthPage>
+    <Layout title="Create Restaurant" isRole={Role.Owner}>
       <div className="flex pt-20 pb-80 justify-center items-center bg-black h-full space-x-6">
         <div className="text-white w-[450px] space-y-12 hidden md:block">
           <div className="text-5xl">수많은 고객에게 더 가까이 다가가세요</div>
