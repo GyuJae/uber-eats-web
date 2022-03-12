@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { GetOrdersInput } from "./../../../../__generated__/globalTypes";
+import { GetOrdersInput, OrderStatus } from "./../../../../__generated__/globalTypes";
 
 // ====================================================
 // GraphQL query operation: getOrdersForDriver
@@ -21,6 +21,7 @@ export interface getOrdersForDriver_getOrders_orders {
   lat: number | null;
   lon: number | null;
   total: number | null;
+  status: OrderStatus;
   client: getOrdersForDriver_getOrders_orders_client;
 }
 

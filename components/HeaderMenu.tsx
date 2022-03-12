@@ -56,7 +56,7 @@ const HeaderMenu: React.FC<IHeaderMenu> = ({ menuAnimation }) => {
                     <span className="font-semibold">Orders</span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
+                {/* <div className="flex items-center space-x-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-6 w-6"
@@ -72,7 +72,7 @@ const HeaderMenu: React.FC<IHeaderMenu> = ({ menuAnimation }) => {
                   <div>
                     <span className="font-semibold">Favorites</span>
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
             <div className="py-6">

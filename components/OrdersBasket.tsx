@@ -11,9 +11,14 @@ import { basketState } from "@providers/basket.state";
 import ErrorSpan from "@components/ErrorSpan";
 import { GET_ORDERS_QUERY } from "@libs/server/queries/getOrders.gql";
 import useCoords from "@libs/client/hooks/useCoords";
+import { useForm } from "react-hook-form";
 
 interface IOrdersBaseket {
   setOrdersBasket: any;
+}
+
+interface IAddress {
+  address: string;
 }
 
 const OrdersBasket: React.FC<IOrdersBaseket> = ({ setOrdersBasket }) => {
@@ -46,14 +51,21 @@ const OrdersBasket: React.FC<IOrdersBaseket> = ({ setOrdersBasket }) => {
     optionAndChoice: input.optionAndChoice,
   }));
 
+  const { register, watch } = useForm<IAddress>();
+
   const onCreateOrder = () => {
     if (loading) return;
+    const address = watch("address");
+    if (!address || address === "") {
+      alert("Please input your address.");
+      return;
+    }
     mutate({
       variables: {
         input: {
           restaurantId: +(id as string),
           createOrderInputList,
-          address: "",
+          address,
           lat: latitude || -1,
           lon: longitude || -1,
         },
@@ -63,7 +75,7 @@ const OrdersBasket: React.FC<IOrdersBaseket> = ({ setOrdersBasket }) => {
 
   return (
     <div className="absolute top-14 left-28 w-96 min-h-[280px] bg-white rounded-sm shadow-md overflow-y-auto z-20">
-      <div className=" p-2">
+      <div className="p-2 flex items-center space-x-2">
         <svg
           width="36px"
           height="36px"
@@ -80,6 +92,11 @@ const OrdersBasket: React.FC<IOrdersBaseket> = ({ setOrdersBasket }) => {
             fill="#000000"
           ></path>
         </svg>
+        <input
+          placeholder="Your address"
+          {...register("address")}
+          className="bg-gray-100 px-2 py-1 w-72"
+        />
       </div>
       {state.length === 0 ? (
         <div className="flex justify-center items-center h-full py-20">

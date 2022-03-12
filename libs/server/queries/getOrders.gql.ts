@@ -11,6 +11,7 @@ export const GET_ORDERS_DRIVER = gql`
         lat
         lon
         total
+        status
         client {
           email
         }

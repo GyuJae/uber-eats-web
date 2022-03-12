@@ -1,7 +1,6 @@
 import { useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import Layout from "@components/Layout";
 import LoadingPage from "@components/LoadingPage";
@@ -15,7 +14,6 @@ import Food from "@svgs/Food.svg";
 import { OrderStatus, Role } from "../../../__generated__/globalTypes";
 
 const Orders: NextPage = () => {
-  const router = useRouter();
   const [status, setStatus] = useState<OrderStatus | null>(null);
   const { data, loading } = useQuery<getOrders, getOrdersVariables>(
     GET_ORDERS_QUERY,
@@ -45,7 +43,6 @@ const Orders: NextPage = () => {
                 <div
                   key={order.id}
                   className="py-2  border-[1px] rounded-md shadow-sm hover:shadow-md cursor-pointer"
-                  onClick={() => router.push(`/client/orders/${order.id}`)}
                 >
                   <div className="relative h-48">
                     <Image
@@ -58,8 +55,11 @@ const Orders: NextPage = () => {
                       className="absolute"
                     />
                   </div>
-                  <div className="py-2 px-1 space-x-2">
-                    <span className="font-medium">{order.restaurant.name}</span>
+                  <div className="flex justify-between py-2 px-1 space-x-2">
+                    <div className="font-medium">{order.restaurant.name}</div>
+                    <div className="font-semibold text-sm bg-green-300 text-green-800 p-1 rounded-sm">
+                      {orderStatusToKorean(order.status)}
+                    </div>
                   </div>
                 </div>
               ))}

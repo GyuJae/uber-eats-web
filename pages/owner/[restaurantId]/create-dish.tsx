@@ -15,6 +15,7 @@ import {
   createDishVariables,
 } from "@libs/server/mutations/__generated__/createDish";
 import { Role } from "__generated__/globalTypes";
+import { ALL_RESTAURANT_QUERY } from "@libs/server/queries/allRestaurants.gql";
 
 interface ICreateDish {
   name: string;
@@ -41,6 +42,7 @@ const CreateDish: NextPage = () => {
           if (window.confirm("메뉴의 옵션을 추가 하시겠습니까?")) {
             router.replace(`/owner/${restaurantId}/${dishId}/create-options`);
           } else {
+            router.push("/");
           }
         } else if (!ok && error) {
           setError("formErrors", {
@@ -90,6 +92,7 @@ const CreateDish: NextPage = () => {
           restaurantId: +(restaurantId as string),
         },
       },
+      refetchQueries: [ALL_RESTAURANT_QUERY, "allRestaurant"],
     });
   };
 

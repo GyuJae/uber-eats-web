@@ -12,6 +12,8 @@ import Layout from "@components/Layout";
 import { FormEventHandler, useState } from "react";
 import ErrorSpan from "@components/ErrorSpan";
 import { Role } from "__generated__/globalTypes";
+import { ALL_RESTAURANT_QUERY } from "@libs/server/queries/allRestaurants.gql";
+import { FIND_RESTAURANT_BY_ID_QUERY } from "@libs/server/queries/findRestaurantById.gql";
 
 type OptionNameValues = {
   options: {
@@ -45,7 +47,7 @@ const CreateOptions: NextPage = () => {
     {
       onCompleted: ({ editDish: { ok, error } }) => {
         if (ok) {
-          router.replace(`/owner/restaurants/${restaurantId}`);
+          router.replace(`/`);
         } else if (!ok && error) {
           setError("formError", {
             message: error,
@@ -62,9 +64,7 @@ const CreateOptions: NextPage = () => {
     formState: { errors },
     getValues,
     setError,
-  } = useForm<OptionNameValues>({
-    mode: "onBlur",
-  });
+  } = useForm<OptionNameValues>();
 
   const { register: choiceRegister, getValues: choiceGetValues } = useForm();
 
@@ -88,6 +88,7 @@ const CreateOptions: NextPage = () => {
           options: editDishVariables,
         },
       },
+      refetchQueries: [FIND_RESTAURANT_BY_ID_QUERY, "findRestaurantById"],
     });
   };
 
@@ -125,7 +126,7 @@ const CreateOptions: NextPage = () => {
   };
 
   return (
-    <Layout isAuthPage title="Create Options" isRole={Role.Owner}>
+    <Layout title="Create Options" isRole={Role.Owner}>
       <div className="px-4 py-5 max-w-xl mx-auto space-y-4">
         <div className="flex items-center space-x-3">
           <button

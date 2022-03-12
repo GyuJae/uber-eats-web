@@ -136,7 +136,7 @@ const Orders: NextPage = () => {
 
   return (
     <Layout title="Take Orders" isRole={Role.Delivery}>
-      <div className="w-full h-[50vh]">
+      {/* <div className="w-full h-[50vh]">
         <GoogleMapReact
           defaultZoom={17}
           draggable={true}
@@ -149,7 +149,7 @@ const Orders: NextPage = () => {
         >
           <Driver lat={latitude} lng={longitude} />
         </GoogleMapReact>
-      </div>
+      </div> */}
       <div className="p-4">
         <span className="font-semibold">Currenet My Dirving Orders</span>
         {getOrdersLoading ? (
@@ -180,7 +180,7 @@ const Orders: NextPage = () => {
                   onClick={() => onCompletedOrder(order.id)}
                   className="text-sm bg-green-500 hover:bg-green-600 cursor-pointer py-2 flex justify-center items-center text-white font-semibold rounded-sm"
                 >
-                  Completed Delivery
+                  {editOrderLoading ? "loading..." : "Completed Delivery"}
                 </div>
               </div>
             ))}
@@ -190,7 +190,7 @@ const Orders: NextPage = () => {
       <div className="p-4">
         <span className="font-semibold">Take Orders</span>
         <div className="p-4 pb-20">
-          {true ? (
+          {loading ? (
             <div className="flex justify-center items-center">
               Take Ordering Waiting...
             </div>
@@ -198,7 +198,7 @@ const Orders: NextPage = () => {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 gap-y-6">
               {orders.map((order) => (
                 <div key={order.id} className="w-full h-[300px]">
-                  <GoogleMapReact
+                  {/* <GoogleMapReact
                     defaultZoom={17}
                     draggable={true}
                     defaultCenter={{
@@ -210,7 +210,7 @@ const Orders: NextPage = () => {
                     }}
                   >
                     <Order lat={order.lat || 0} lng={order.lon || 0} />
-                  </GoogleMapReact>{" "}
+                  </GoogleMapReact>{" "} */}
                   <div className="mt-2">
                     <span className="font-semibold text-sm">Address:</span>{" "}
                     <span className="text-xs">{order.address}</span>
